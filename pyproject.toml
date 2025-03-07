@@ -1,0 +1,20 @@
+[project]
+name = "timbremetrics"
+description = "Metrics to test the alignment between audio models and human timbre perception"
+dynamic = ["version"]
+dependencies = [
+    "soundfile",
+    "numpy",
+    "torch",
+    "torchaudio",
+    "torchmetrics",
+]
+
+[project.optional-dependencies]
+dev = [
+    'black',
+]
+
+[build-system]
+requires = ["setuptools>=64", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
