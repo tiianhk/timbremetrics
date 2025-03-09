@@ -139,7 +139,7 @@ class TimbreMetric(nn.Module):
                     embedding = torch.tensor(embedding)
                 embedding = torch.mean(
                     embedding, dim=0
-                )  # (n_frames, n_features) -> (n_features)
+                ).float()  # (n_frames, n_features) -> (n_features)
             else:
                 embedding = model(audio)  # audio shape (1, n_samples)
                 assert isinstance(embedding, Tensor)
@@ -157,7 +157,7 @@ class TimbreMetric(nn.Module):
         for dist_fn in self.distances:
             nested_scores[dist_fn.__name__] = {}
             for metric_fn in self.metrics:
-                nested_scores[dist_fn.__name__][metric.__name__] = (
+                nested_scores[dist_fn.__name__][metric_fn.__name__] = (
                     self._evaluate_one_metric(
                         nested_pred_dissim[dist_fn.__name__], metric_fn
                     )

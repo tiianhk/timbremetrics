@@ -1,2 +1,2 @@
 ## Installation
-`pip install -e '.[dev]'`
+`pip install git+https://github.com/tiianhk/timbre-metrics.git`
