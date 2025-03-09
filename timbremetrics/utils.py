@@ -24,29 +24,44 @@ def list_datasets():
 
 
 def load_audio(
-    dataset, audio_file, device=None, dtype=None, target_sr=None, fixed_duration=None
+    dataset,
+    audio_file,
+    fadtk_model=None,
+    device=None,
+    dtype=None,
+    target_sr=None,
+    fixed_duration=None,
 ):
 
     f = os.path.join(STIMULI_DIR, dataset, audio_file)
-    audio, sr = torchaudio.load(f, backend="soundfile")
 
-    audio = audio.to(device=device, dtype=dtype)
-    if target_sr is not None and sr != target_sr:
-        audio = torchaudio.transforms.Resample(sr, target_sr)(audio)
-        sr = target_sr
-    if fixed_duration is not None:
-        target_num_samples = int(fixed_duration * sr)
-        if audio.shape[-1] > target_num_samples:
-            audio = audio[..., :target_num_samples]
-        elif audio.shape[-1] < target_num_samples:
-            padding = target_num_samples - audio.shape[-1]
-            audio = F.pad(audio, (0, padding))
+    if fadtk_model is not None:
+        audio = fadtk_model.load_wav(f)
+        sr = fadtk_model.sr
+    else:
+        audio, sr = torchaudio.load(f, backend="soundfile")
+        audio = audio.to(device=device, dtype=dtype)
+        if target_sr is not None and sr != target_sr:
+            audio = torchaudio.transforms.Resample(sr, target_sr)(audio)
+            sr = target_sr
+        if fixed_duration is not None:
+            target_num_samples = int(fixed_duration * sr)
+            if audio.shape[-1] > target_num_samples:
+                audio = audio[..., :target_num_samples]
+            elif audio.shape[-1] < target_num_samples:
+                padding = target_num_samples - audio.shape[-1]
+                audio = F.pad(audio, (0, padding))
 
     return audio, sr
 
 
 def load_dataset_audio(
-    dataset, device=None, dtype=None, target_sr=None, fixed_duration=None
+    dataset,
+    fadtk_model=None,
+    device=None,
+    dtype=None,
+    target_sr=None,
+    fixed_duration=None,
 ):
 
     audio_files = os.listdir(os.path.join(STIMULI_DIR, dataset))
@@ -60,6 +75,7 @@ def load_dataset_audio(
         audio, sr = load_audio(
             dataset,
             audio_file,
+            fadtk_model=fadtk_model,
             device=device,
             dtype=dtype,
             target_sr=target_sr,
@@ -70,12 +86,15 @@ def load_dataset_audio(
     return audio_data
 
 
-def get_audio(device=None, dtype=None, target_sr=None, fixed_duration=None):
+def get_audio(
+    fadtk_model=None, device=None, dtype=None, target_sr=None, fixed_duration=None
+):
     datasets = list_datasets()
     dataset_audio = {}
     for d in datasets:
         dataset_audio[d] = load_dataset_audio(
             d,
+            fadtk_model=fadtk_model,
             device=device,
             dtype=dtype,
             target_sr=target_sr,

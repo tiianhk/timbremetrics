@@ -1,3 +1,4 @@
+from typing import Callable
 import torch
 import torch.nn as nn
 from torch import Tensor
@@ -14,11 +15,13 @@ from .utils import (
 from .distances import euclidean, cosine, poincare
 
 
-def mae(pred: Tensor, true: Tensor):
+def mae(pred: Tensor, true: Tensor) -> Tensor:
     return torch.sum(torch.abs(pred - true))
 
 
-def rank_based_metric(function, pred: Tensor, true: Tensor, flip=False):
+def rank_based_metric(
+    fn: Callable, pred: Tensor, true: Tensor, flip: bool = False
+) -> Tensor:
     pred = pred + pred.T
     true = true + true.T
     mask_ = torch.ones_like(pred, dtype=torch.bool)
@@ -26,62 +29,87 @@ def rank_based_metric(function, pred: Tensor, true: Tensor, flip=False):
     N = pred.shape[0]
     pred = pred[mask_].reshape(N, N - 1)
     true = true[mask_].reshape(N, N - 1)
+    if flip:
+        pred = 1 - pred
+        true = 1 - true
     scores = torch.zeros_like(pred[:, 0])
     for i in range(N):
-        if flip:
-            scores[i] = function(1 - pred[i], 1 - true[i])
-        else:
-            scores[i] = function(pred[i], true[i])
+        scores[i] = fn(pred[i], true[i])
     return scores.sum()
 
 
-def ndcg_retrieve_sim(pred: Tensor, true: Tensor):
+def ndcg_retrieve_sim(pred: Tensor, true: Tensor) -> Tensor:
     return rank_based_metric(retrieval_normalized_dcg, pred, true, flip=True)
 
 
-def spearman_corr(pred: Tensor, true: Tensor):
+def spearman_corr(pred: Tensor, true: Tensor) -> Tensor:
     return rank_based_metric(spearman_corrcoef, pred, true)
 
 
-def kendall_corr(pred: Tensor, true: Tensor):
+def kendall_corr(pred: Tensor, true: Tensor) -> Tensor:
     return rank_based_metric(kendall_rank_corrcoef, pred, true)
 
 
 class TimbreMetric(nn.Module):
-    def __init__(self, model, distance=cosine, sample_rate=None, fixed_duration=None):
+    def __init__(
+        self,
+        model,
+        use_fadtk_model=False,
+        distances=None,
+        metrics=None,
+        sample_rate=None,
+        fixed_duration=None,
+    ):
         super().__init__()
+
         self.model = model
         self.model_id = id(model)
-        self.distance = distance
+        self.use_fadtk_model = use_fadtk_model
+
+        self.distances = [euclidean, cosine, poincare]
+        if distances is not None:
+            assert set(distances).issubset(
+                set(self.distances)
+            ), "Invalid distance function."
+            self.distances = distances
+
+        self.metrics = [mae, ndcg_retrieve_sim, spearman_corr, kendall_corr]
+        if metrics is not None:
+            assert set(metrics).issubset(set(self.metrics)), "Invalid metric function."
+            self.metrics = metrics
+
         self.sample_rate = sample_rate
         self.fixed_duration = fixed_duration
-        self._retrieve_model_info(model)
+        self.device, self.dtype = self._retrieve_model_info(self.model)
         self.datasets = list_datasets()
         self.audio = get_audio(
+            fadtk_model=self.model if self.use_fadtk_model else None,
             device=self.device,
             dtype=self.dtype,
             target_sr=self.sample_rate,
             fixed_duration=self.fixed_duration,
         )
         self.true_dissim = get_true_dissim(device=self.device)
-        self._retrieve_dissim_info()
+        self.num_pairs, self.num_stimuli = self._retrieve_dissim_info()
 
     def _retrieve_model_info(self, model):
-        self.device = None
-        self.dtype = None
+        device = None
+        dtype = None
         if isinstance(model, nn.Module):
             if any(model.parameters()):
                 first_param = next(model.parameters())
-                self.dtype = first_param.dtype
-                self.device = first_param.device
+                dtype = first_param.dtype
+                device = first_param.device
+        return device, dtype
 
     def _retrieve_dissim_info(self):
-        self.num_pairs = torch.tensor(0.0).to(self.device)
-        self.num_stimuli = torch.tensor(0.0).to(self.device)
+        num_pairs = torch.tensor(0.0).to(self.device)
+        num_stimuli = torch.tensor(0.0).to(self.device)
         for d in self.datasets:
             N = self.true_dissim[d].shape[0]
-            self.num_stimuli += N
-            self.num_pairs += N * (N - 1) / 2
+            num_stimuli += N
+            num_pairs += N * (N - 1) / 2
+        return num_pairs, num_stimuli
 
     def forward(self, model=None):
         if model is None:
@@ -92,11 +120,12 @@ class TimbreMetric(nn.Module):
         if hasattr(model, "training"):
             if model.training:
                 model.eval()
-        pred_dissim = {}
+        pred_dissim = {dist_fn.__name__: {} for dist_fn in self.distances}
         for d in self.datasets:
             embeddings = self._extract_dataset_embeddings(model, self.audio[d])
-            dist = self.distance(embeddings)
-            pred_dissim[d] = min_max_normalization(mask(dist))
+            for dist_fn in self.distances:
+                dist = dist_fn(embeddings)
+                pred_dissim[dist_fn.__name__][d] = min_max_normalization(mask(dist))
         return self._evaluate(pred_dissim)
 
     @torch.no_grad()
@@ -104,8 +133,16 @@ class TimbreMetric(nn.Module):
         embeddings = []
         for x in dataset:
             audio = x["audio"]
-            embedding = model(audio)  # audio shape (1, num_samples)
-            assert isinstance(embedding, Tensor)
+            if self.use_fadtk_model:
+                embedding = model.get_embedding(audio)
+                if not isinstance(embedding, Tensor):
+                    embedding = torch.tensor(embedding)
+                embedding = torch.mean(
+                    embedding, dim=0
+                )  # (n_frames, n_features) -> (n_features)
+            else:
+                embedding = model(audio)  # audio shape (1, n_samples)
+                assert isinstance(embedding, Tensor)
             embedding = embedding.flatten()
             embeddings.append(embedding)
         if len(set([embedding.shape for embedding in embeddings])) > 1:
@@ -115,23 +152,24 @@ class TimbreMetric(nn.Module):
             )
         return torch.stack(embeddings)
 
-    def _evaluate(self, pred_dissim):
-        mae_score = torch.tensor(0.0).to(self.device)
-        ndcg_score = torch.tensor(0.0).to(self.device)
-        spearman_score = torch.tensor(0.0).to(self.device)
-        kendall_score = torch.tensor(0.0).to(self.device)
+    def _evaluate(self, nested_pred_dissim: dict):
+        nested_scores = {}
+        for dist_fn in self.distances:
+            nested_scores[dist_fn.__name__] = {}
+            for metric_fn in self.metrics:
+                nested_scores[dist_fn.__name__][metric.__name__] = (
+                    self._evaluate_one_metric(
+                        nested_pred_dissim[dist_fn.__name__], metric_fn
+                    )
+                )
+        return nested_scores
+
+    def _evaluate_one_metric(self, pred_dissim: dict, metric_fn: Callable) -> Tensor:
+        score = torch.tensor(0.0).to(self.device)
         for d in self.datasets:
-            mae_score += mae(pred_dissim[d], self.true_dissim[d])
-            ndcg_score += ndcg_retrieve_sim(pred_dissim[d], self.true_dissim[d])
-            spearman_score += spearman_corr(pred_dissim[d], self.true_dissim[d])
-            kendall_score += kendall_corr(pred_dissim[d], self.true_dissim[d])
-        mae_score /= self.num_pairs
-        ndcg_score /= self.num_stimuli
-        spearman_score /= self.num_stimuli
-        kendall_score /= self.num_stimuli
-        return {
-            "mae": mae_score,
-            "ndcg": ndcg_score,
-            "spearman": spearman_score,
-            "kendall": kendall_score,
-        }
+            score += metric_fn(pred_dissim[d], self.true_dissim[d])
+        if metric_fn.__name__ == "mae":
+            score /= self.num_pairs
+        else:
+            score /= self.num_stimuli
+        return score
