@@ -12,6 +12,8 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+    "scipy",
+    "matplotlib",
     "black",
 ]
 
