@@ -6,7 +6,7 @@ from torchmetrics.functional.retrieval import retrieval_normalized_dcg
 from torchmetrics.functional import spearman_corrcoef, kendall_rank_corrcoef
 
 from .utils import (
-    get_audio,
+    AudioLoader,
     get_true_dissim,
     list_datasets,
     mask,
@@ -55,9 +55,11 @@ class TimbreMetric(nn.Module):
         self,
         model,
         use_fadtk_model=False,
+        fadtk_keep_time_dimension=False,
         distances=None,
         metrics=None,
         sample_rate=None,
+        pad_to_max_duration=False,
         fixed_duration=None,
     ):
         super().__init__()
@@ -65,6 +67,7 @@ class TimbreMetric(nn.Module):
         self.model = model
         self.model_id = id(model)
         self.use_fadtk_model = use_fadtk_model
+        self.fadtk_keep_time_dimension = fadtk_keep_time_dimension
 
         self.distances = [euclidean, cosine, poincare]
         if distances is not None:
@@ -79,16 +82,19 @@ class TimbreMetric(nn.Module):
             self.metrics = metrics
 
         self.sample_rate = sample_rate
+        self.pad_to_max_duration = pad_to_max_duration
         self.fixed_duration = fixed_duration
         self.device, self.dtype = self._retrieve_model_info(self.model)
         self.datasets = list_datasets()
-        self.audio = get_audio(
+        audio_loader = AudioLoader(
             fadtk_model=self.model if self.use_fadtk_model else None,
             device=self.device,
             dtype=self.dtype,
             target_sr=self.sample_rate,
+            pad_to_max_duration=self.pad_to_max_duration,
             fixed_duration=self.fixed_duration,
         )
+        self.audio_datasets = audio_loader._load_audio_datasets()
         self.true_dissim = get_true_dissim(device=self.device)
         self.num_pairs, self.num_stimuli = self._retrieve_dissim_info()
 
@@ -122,7 +128,7 @@ class TimbreMetric(nn.Module):
                 model.eval()
         pred_dissim = {dist_fn.__name__: {} for dist_fn in self.distances}
         for d in self.datasets:
-            embeddings = self._extract_dataset_embeddings(model, self.audio[d])
+            embeddings = self._extract_dataset_embeddings(model, self.audio_datasets[d])
             for dist_fn in self.distances:
                 dist = dist_fn(embeddings)
                 pred_dissim[dist_fn.__name__][d] = min_max_normalization(mask(dist))
@@ -137,9 +143,10 @@ class TimbreMetric(nn.Module):
                 embedding = model.get_embedding(audio)
                 if not isinstance(embedding, Tensor):
                     embedding = torch.tensor(embedding)
-                embedding = torch.mean(
-                    embedding, dim=0
-                ).float()  # (n_frames, n_features) -> (n_features)
+                if not self.fadtk_keep_time_dimension:
+                    embedding = torch.mean(
+                        embedding, dim=0
+                    ).float()  # (n_frames, n_features) -> (n_features)
             else:
                 embedding = model(audio)  # audio shape (1, n_samples)
                 assert isinstance(embedding, Tensor)

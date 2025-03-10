@@ -23,95 +23,76 @@ def list_datasets():
     return sorted(dataset_files)
 
 
-def load_audio(
-    dataset,
-    audio_file,
-    fadtk_model=None,
-    device=None,
-    dtype=None,
-    target_sr=None,
-    fixed_duration=None,
-):
+class AudioLoader:
+    def __init__(
+        self,
+        fadtk_model=None,
+        device=None,
+        dtype=None,
+        target_sr=None,
+        pad_to_max_duration=False,
+        fixed_duration=None,
+    ):
+        self.fadtk_model = fadtk_model
+        self.device = device
+        self.dtype = dtype
+        self.target_sr = target_sr
+        self.pad_to_max_duration = pad_to_max_duration
+        self.fixed_duration = fixed_duration
 
-    f = os.path.join(STIMULI_DIR, dataset, audio_file)
+    def _load_audio_datasets(self):
+        datasets = list_datasets()
+        audio_datasets = {}
+        for d in datasets:
+            audio_datasets[d] = self._load_one_audio_dataset(d)
+        return audio_datasets
 
-    if fadtk_model is not None:
-        audio = fadtk_model.load_wav(f)
-        sr = fadtk_model.sr
-    else:
-        audio, sr = torchaudio.load(f, backend="soundfile")
-        audio = audio.to(device=device, dtype=dtype)
-        if target_sr is not None and sr != target_sr:
-            audio = torchaudio.transforms.Resample(sr, target_sr)(audio)
-            sr = target_sr
-        if fixed_duration is not None:
-            target_num_samples = int(fixed_duration * sr)
-            if audio.shape[-1] > target_num_samples:
-                audio = audio[..., :target_num_samples]
-            elif audio.shape[-1] < target_num_samples:
-                padding = target_num_samples - audio.shape[-1]
-                audio = F.pad(audio, (0, padding))
+    def _load_one_audio_dataset(self, dataset):
+        audio_files = os.listdir(os.path.join(STIMULI_DIR, dataset))
+        audio_files = sorted(audio_files)
+        audio_dataset = []
+        for audio_file in audio_files:
+            if not audio_file.endswith(".aiff"):
+                continue
+            audio, sr = self._load_one_audio_file(dataset, audio_file)
+            audio_dataset.append(
+                {"file": audio_file, "audio": audio, "sample_rate": sr}
+            )
+            if self.pad_to_max_duration:
+                assert self.fixed_duration is None
+                max_sample_num = max([x["audio"].shape[-1] for x in audio_dataset])
+                for x in audio_dataset:
+                    padding = max_sample_num - x["audio"].shape[-1]
+                    x["audio"] = F.pad(x["audio"], (0, padding))
+        return audio_dataset
 
-    return audio, sr
-
-
-def load_dataset_audio(
-    dataset,
-    fadtk_model=None,
-    device=None,
-    dtype=None,
-    target_sr=None,
-    fixed_duration=None,
-):
-
-    audio_files = os.listdir(os.path.join(STIMULI_DIR, dataset))
-    audio_files = sorted(audio_files)
-
-    audio_data = []
-    for audio_file in audio_files:
-        if os.path.splitext(audio_file)[1] != ".aiff":
-            continue
-
-        audio, sr = load_audio(
-            dataset,
-            audio_file,
-            fadtk_model=fadtk_model,
-            device=device,
-            dtype=dtype,
-            target_sr=target_sr,
-            fixed_duration=fixed_duration,
-        )
-        audio_data.append({"file": audio_file, "audio": audio, "sample_rate": sr})
-
-    return audio_data
-
-
-def get_audio(
-    fadtk_model=None, device=None, dtype=None, target_sr=None, fixed_duration=None
-):
-    datasets = list_datasets()
-    dataset_audio = {}
-    for d in datasets:
-        dataset_audio[d] = load_dataset_audio(
-            d,
-            fadtk_model=fadtk_model,
-            device=device,
-            dtype=dtype,
-            target_sr=target_sr,
-            fixed_duration=fixed_duration,
-        )
-    return dataset_audio
-
-
-def load_dissimilarity_matrix(dataset, device=None):
-    f = os.path.join(TRUE_DISSIM_DIR, f"{dataset}_dissimilarity_matrix.txt")
-    return torch.tensor(np.loadtxt(f)).to(device)
+    def _load_one_audio_file(self, dataset, audio_file):
+        f = os.path.join(STIMULI_DIR, dataset, audio_file)
+        if self.fadtk_model is not None:
+            audio = self.fadtk_model.load_wav(f)
+            sr = self.fadtk_model.sr
+        else:
+            audio, sr = torchaudio.load(f, backend="soundfile")
+            audio = audio.to(device=self.device, dtype=self.dtype)
+            if self.target_sr is not None and sr != self.target_sr:
+                audio = torchaudio.transforms.Resample(sr, self.target_sr)(audio)
+                sr = self.target_sr
+            if self.fixed_duration is not None:
+                assert self.pad_to_max_duration is False
+                target_sample_num = int(self.fixed_duration * sr)
+                if audio.shape[-1] > target_sample_num:
+                    audio = audio[..., :target_sample_num]
+                elif audio.shape[-1] < target_sample_num:
+                    padding = target_sample_num - audio.shape[-1]
+                    audio = F.pad(audio, (0, padding))
+        return audio, sr
 
 
 def get_true_dissim(device=None):
     datasets = list_datasets()
     true_dissim = {}
     for d in datasets:
-        data = load_dissimilarity_matrix(d, device=device)
+        f = os.path.join(TRUE_DISSIM_DIR, f"{d}_dissimilarity_matrix.txt")
+        data = torch.tensor(np.loadtxt(f)).to(device)
         true_dissim[d] = min_max_normalization(mask(data))
     return true_dissim
