@@ -19,6 +19,20 @@ def mae(pred: Tensor, true: Tensor) -> Tensor:
     return torch.sum(torch.abs(pred - true))
 
 
+def triplet_agreement(pred: Tensor, true: Tensor, margin: float = 0.1) -> Tensor:
+    true_diff = true.unsqueeze(0) - true.unsqueeze(1)
+    pred_diff = pred.unsqueeze(0) - pred.unsqueeze(1)
+    valid_mask = torch.abs(true_diff) > margin
+    upper_triangle_mask = torch.triu(torch.ones_like(valid_mask, dtype=bool), diagonal=1)
+    valid_mask = valid_mask & upper_triangle_mask
+    agreement_mask = (pred_diff * true_diff) > 0
+    agreements = torch.sum(agreement_mask & valid_mask)
+    valid_pairs = torch.sum(valid_mask)
+    if valid_pairs == 0:
+        return torch.tensor(0.0).to(pred.device)
+    return agreements / valid_pairs
+
+
 def rank_based_metric(
     fn: Callable, pred: Tensor, true: Tensor, flip: bool = False
 ) -> Tensor:
@@ -50,6 +64,10 @@ def kendall_corr(pred: Tensor, true: Tensor) -> Tensor:
     return rank_based_metric(kendall_rank_corrcoef, pred, true)
 
 
+def triplet_agree(pred: Tensor, true: Tensor) -> Tensor:
+    return rank_based_metric(triplet_agreement, pred, true)
+
+
 class TimbreMetric(nn.Module):
     def __init__(
         self,
@@ -76,7 +94,7 @@ class TimbreMetric(nn.Module):
             ), "Invalid distance function."
             self.distances = distances
 
-        self.metrics = [mae, ndcg_retrieve_sim, spearman_corr, kendall_corr]
+        self.metrics = [mae, ndcg_retrieve_sim, spearman_corr, kendall_corr, triplet_agree]
         if metrics is not None:
             assert set(metrics).issubset(set(self.metrics)), "Invalid metric function."
             self.metrics = metrics
