@@ -121,7 +121,7 @@ tensorboard==2.19.0
 tensorboard-data-server==0.7.2
 termcolor==2.5.0
 threadpoolctl==3.5.0
-timbremetrics @ git+https://github.com/tiianhk/timbre-metrics.git@ed32094fe898cb0b3b7988c4a2608fdbee1fc99e
+timbremetrics @ git+https://github.com/tiianhk/timbre-metrics.git
 tokenizers==0.21.0
 torch==2.1.2
 torch-stoi==0.2.3
