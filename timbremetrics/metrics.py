@@ -19,11 +19,50 @@ def mae(pred: Tensor, true: Tensor) -> Tensor:
     return torch.sum(torch.abs(pred - true))
 
 
-def triplet_agreement(pred: Tensor, true: Tensor, margin: float = 0.1) -> Tensor:
+def _prepare_rank_scores(pred: Tensor, true: Tensor) -> tuple[Tensor, Tensor]:
+    # symmetrize
+    pred = pred + pred.T
+    true = true + true.T
+    # remove self-comparisons
+    mask_ = torch.ones_like(pred, dtype=torch.bool)
+    mask_.fill_diagonal_(False)
+    N = pred.shape[0]
+    pred = pred[mask_].reshape(N, N - 1)
+    true = true[mask_].reshape(N, N - 1)
+    return pred, true
+
+
+def ndcg_retrieve_sim(pred: Tensor, true: Tensor) -> Tensor:
+    pred, true = _prepare_rank_scores(pred, true)
+    # flip to retrieve similar items
+    pred = 1 - pred
+    true = 1 - true
+    ndcg_scores = torch.zeros_like(pred[:, 0])
+    # retrieval_normalized_dcg flatten input tensors
+    for i in range(pred.shape[0]):
+        ndcg_scores[i] = retrieval_normalized_dcg(pred[i], true[i])
+    return ndcg_scores.sum()
+
+
+def spearman_corr(pred: Tensor, true: Tensor) -> Tensor:
+    pred, true = _prepare_rank_scores(pred, true)
+    return spearman_corrcoef(pred.T, true.T).sum()
+
+
+def kendall_corr(pred: Tensor, true: Tensor) -> Tensor:
+    pred, true = _prepare_rank_scores(pred, true)
+    return kendall_rank_corrcoef(pred.T, true.T).sum()
+
+
+def _compute_triplet_agreement_one_anchor(
+    pred: Tensor, true: Tensor, margin: float = 0.1
+) -> Tensor:
     true_diff = true.unsqueeze(0) - true.unsqueeze(1)
     pred_diff = pred.unsqueeze(0) - pred.unsqueeze(1)
     valid_mask = torch.abs(true_diff) > margin
-    upper_triangle_mask = torch.triu(torch.ones_like(valid_mask, dtype=bool), diagonal=1)
+    upper_triangle_mask = torch.triu(
+        torch.ones_like(valid_mask, dtype=bool), diagonal=1
+    )
     valid_mask = valid_mask & upper_triangle_mask
     agreement_mask = (pred_diff * true_diff) > 0
     agreements = torch.sum(agreement_mask & valid_mask)
@@ -33,39 +72,14 @@ def triplet_agreement(pred: Tensor, true: Tensor, margin: float = 0.1) -> Tensor
     return agreements / valid_pairs
 
 
-def rank_based_metric(
-    fn: Callable, pred: Tensor, true: Tensor, flip: bool = False
-) -> Tensor:
-    pred = pred + pred.T
-    true = true + true.T
-    mask_ = torch.ones_like(pred, dtype=torch.bool)
-    mask_.fill_diagonal_(False)
-    N = pred.shape[0]
-    pred = pred[mask_].reshape(N, N - 1)
-    true = true[mask_].reshape(N, N - 1)
-    if flip:
-        pred = 1 - pred
-        true = 1 - true
+def triplet_agreement(pred: Tensor, true: Tensor, margin: float = 0.1) -> Tensor:
+    pred, true = _prepare_rank_scores(pred, true)
     scores = torch.zeros_like(pred[:, 0])
-    for i in range(N):
-        scores[i] = fn(pred[i], true[i])
+    for i in range(pred.shape[0]):
+        scores[i] = _compute_triplet_agreement_one_anchor(
+            pred[i], true[i], margin=margin
+        )
     return scores.sum()
-
-
-def ndcg_retrieve_sim(pred: Tensor, true: Tensor) -> Tensor:
-    return rank_based_metric(retrieval_normalized_dcg, pred, true, flip=True)
-
-
-def spearman_corr(pred: Tensor, true: Tensor) -> Tensor:
-    return rank_based_metric(spearman_corrcoef, pred, true)
-
-
-def kendall_corr(pred: Tensor, true: Tensor) -> Tensor:
-    return rank_based_metric(kendall_rank_corrcoef, pred, true)
-
-
-def triplet_agree(pred: Tensor, true: Tensor) -> Tensor:
-    return rank_based_metric(triplet_agreement, pred, true)
 
 
 class TimbreMetric(nn.Module):
@@ -94,7 +108,13 @@ class TimbreMetric(nn.Module):
             ), "Invalid distance function."
             self.distances = distances
 
-        self.metrics = [mae, ndcg_retrieve_sim, spearman_corr, kendall_corr, triplet_agree]
+        self.metrics = [
+            mae,
+            ndcg_retrieve_sim,
+            spearman_corr,
+            kendall_corr,
+            triplet_agreement,
+        ]
         if metrics is not None:
             assert set(metrics).issubset(set(self.metrics)), "Invalid metric function."
             self.metrics = metrics
