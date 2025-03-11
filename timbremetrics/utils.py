@@ -63,7 +63,22 @@ class AudioLoader:
                 max_sample_num = max([x["audio"].shape[-1] for x in audio_dataset])
                 for x in audio_dataset:
                     padding = max_sample_num - x["audio"].shape[-1]
-                    x["audio"] = F.pad(x["audio"], (0, padding))
+                    if isinstance(x["audio"], torch.Tensor):
+                        x["audio"] = F.pad(x["audio"], (0, padding))
+                    elif isinstance(x["audio"], np.ndarray):
+                        assert self.fadtk_model is not None
+                        pad_width = [(0, 0)] * (x["audio"].ndim - 1) + [(0, padding)]
+                        x["audio"] = np.pad(x["audio"], pad_width)
+                    else:
+                        assert self.fadtk_model is not None
+                        # for descript audio codec
+                        from audiotools import AudioSignal
+
+                        assert isinstance(x["audio"], AudioSignal)
+                        assert isinstance(x["audio"].audio_data, torch.Tensor)
+                        x["audio"].audio_data = F.pad(
+                            x["audio"].audio_data, (0, padding)
+                        )
         return audio_dataset
 
     def _load_one_audio_file(self, dataset, audio_file):

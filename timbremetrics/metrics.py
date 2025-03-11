@@ -181,10 +181,14 @@ class TimbreMetric(nn.Module):
                 embedding = model.get_embedding(audio)
                 if not isinstance(embedding, Tensor):
                     embedding = torch.tensor(embedding)
+                if embedding.dtype == torch.float16:
+                    embedding = (
+                        embedding.float()
+                    )  # euclidean distance does not support float16
                 if not self.fadtk_keep_time_dimension:
                     embedding = torch.mean(
                         embedding, dim=0
-                    ).float()  # (n_frames, n_features) -> (n_features)
+                    )  # (n_frames, n_features) -> (n_features)
             else:
                 embedding = model(audio)  # audio shape (1, n_samples)
                 assert isinstance(embedding, Tensor)
