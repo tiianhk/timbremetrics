@@ -1,4 +1,5 @@
 import os
+
 os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 import torch
@@ -7,7 +8,8 @@ from timbremetrics.metrics import TimbreMetric
 
 models = [
     CLAPModel("2023"),
-    CLAPLaionModel("audio"), CLAPLaionModel("music"),
+    CLAPLaionModel("audio"),
+    CLAPLaionModel("music"),
     VGGishModel(),
     MERTModel(layer=12),
     EncodecEmbModel("24k"),
@@ -15,16 +17,18 @@ models = [
     DACModel(),
     CdpamModel("acoustic"),
     CdpamModel("content"),
-    W2V2Model('base', layer=12),
-    W2V2Model('large', layer=24),
-    HuBERTModel('base', layer=12),
-    HuBERTModel('large', layer=24),
-    WavLMModel('base', layer=12),
-    WavLMModel('base-plus', layer=12),
-    WavLMModel('large', layer=24),
-    WhisperModel('tiny'), WhisperModel('small'),
-    WhisperModel('base'), WhisperModel('medium'),
-    WhisperModel('large'),
+    W2V2Model("base", layer=12),
+    W2V2Model("large", layer=24),
+    HuBERTModel("base", layer=12),
+    HuBERTModel("large", layer=24),
+    WavLMModel("base", layer=12),
+    WavLMModel("base-plus", layer=12),
+    WavLMModel("large", layer=24),
+    WhisperModel("tiny"),
+    WhisperModel("small"),
+    WhisperModel("base"),
+    WhisperModel("medium"),
+    WhisperModel("large"),
 ]
 
 res = {}

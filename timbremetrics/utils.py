@@ -111,3 +111,12 @@ def get_true_dissim(device=None):
         data = torch.tensor(np.loadtxt(f)).to(device)
         true_dissim[d] = min_max_normalization(mask(data))
     return true_dissim
+
+
+def print_results(model_name, results):
+    print(f"{model_name}:")
+    for distance, metrics in results.items():
+        print(f"    {distance}:")
+        for metric, value in metrics.items():
+            print(f"        {metric}: {value.item():.4f}")
+    print()
