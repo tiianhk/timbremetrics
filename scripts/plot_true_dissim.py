@@ -47,12 +47,12 @@ for label, start, size in zip(block_labels, starts, block_sizes):
         color="black",
     )
 
-cbar = plt.colorbar(scatter, pad=0.02, shrink=0.5, aspect=10)
+cbar = plt.colorbar(scatter, pad=0.0, shrink=0.5, aspect=10)
 cbar.outline.set_visible(False)
-cbar.ax.set_yticks([])
-cbar.ax.set_yticklabels([])
-cbar.ax.text(0, -0.15, "most similar", ha="center", va="bottom", fontsize=6)
-cbar.ax.text(0, 1.15, "most dissimilar", ha="center", va="top", fontsize=6)
+cbar.ax.set_yticks([0,1])
+cbar.ax.set_yticklabels(["identical", "most dissimilar    "])
+# cbar.ax.tick_params(axis='y', which='both', length=0)
+cbar.ax.tick_params(labelsize=8, length=0)
 
 plt.gca().set_aspect("equal")
 plt.ylim(label_y_position - 2, np.max(y))
