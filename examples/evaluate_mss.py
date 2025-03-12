@@ -6,8 +6,10 @@ from timbremetrics.utils import print_results
 
 
 class MultiScaleSpec(nn.Module):
+    """DDSP https://arxiv.org/abs/2001.04643v1"""
+
     def __init__(
-        self, keep_time_dimension=False, fft_sizes=(2048, 1024, 512, 256, 128, 64)
+        self, keep_time_dimension=False, fft_sizes=(4096, 2048, 1024, 512, 256, 128)
     ):
         super().__init__()
         self.name = ", ".join(
