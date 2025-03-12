@@ -12,7 +12,7 @@ from .utils import (
     mask,
     min_max_normalization,
 )
-from .distances import euclidean, cosine, poincare
+from .distances import l1, l2, cosine, poincare
 
 
 def mae(pred: Tensor, true: Tensor) -> Tensor:
@@ -101,7 +101,7 @@ class TimbreMetric(nn.Module):
         self.use_fadtk_model = use_fadtk_model
         self.fadtk_keep_time_dimension = fadtk_keep_time_dimension
 
-        self.distances = [euclidean, cosine, poincare]
+        self.distances = [l1, l2, cosine, poincare]
         if distances is not None:
             assert set(distances).issubset(
                 set(self.distances)

@@ -2,7 +2,11 @@ import torch
 from torchmetrics.functional import pairwise_cosine_similarity
 
 
-def euclidean(x):
+def l1(x):
+    return torch.cdist(x, x, p=1)
+
+
+def l2(x):
     return torch.cdist(x, x, p=2)
 
 

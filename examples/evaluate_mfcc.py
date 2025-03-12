@@ -40,6 +40,7 @@ model = mfcc()
 metric = TimbreMetric(model, sample_rate=model.sr)
 res = metric()
 print_results(model.name, res)
+
 model = mfcc(keep_time_dimension=True)
 metric = TimbreMetric(model, sample_rate=model.sr, pad_to_max_duration=True)
 res = metric()
