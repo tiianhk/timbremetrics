@@ -1,6 +1,6 @@
 # Timbre Metrics
 
-Measure how well your model’s audio embeddings match human timbre perception using 21 published datasets with audio files and pairwise dissimilarity ratings (color-coded in the figure below).
+Measure how well your model’s audio embeddings match human timbre perception using 21 published datasets with audio files and pairwise dissimilarity ratings (color-coded in the three examples below).
 
 ![Dissimilarities between audio stimuli judged by humans](assets/true_dissim.png)
 
