@@ -14,7 +14,11 @@ dataset_names = list(true_dissim.keys())
 matrices = list(true_dissim.values())
 sparse_mtx = block_diag(matrices[idx1], matrices[idx2], matrices[idx3])
 block_labels = [dataset_names[idx1], dataset_names[idx2], dataset_names[idx3]]
-block_sizes = [matrices[idx1].shape[0], matrices[idx2].shape[0], matrices[idx3].shape[0]]
+block_sizes = [
+    matrices[idx1].shape[0],
+    matrices[idx2].shape[0],
+    matrices[idx3].shape[0],
+]
 starts = np.cumsum([0] + block_sizes[:-1])
 
 rows, cols = sparse_mtx.nonzero()
@@ -45,7 +49,8 @@ for label, start, size in zip(block_labels, starts, block_sizes):
 
 cbar = plt.colorbar(scatter, pad=0.02, shrink=0.5, aspect=10)
 cbar.outline.set_visible(False)
-cbar.ax.set_yticklabels([])  # Remove default labels
+cbar.ax.set_yticks([])
+cbar.ax.set_yticklabels([])
 cbar.ax.text(0, -0.15, "most similar", ha="center", va="bottom", fontsize=6)
 cbar.ax.text(0, 1.15, "most dissimilar", ha="center", va="top", fontsize=6)
 
