@@ -12,9 +12,17 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+    "black",
+]
+scripts = [
     "scipy",
     "matplotlib",
-    "black",
+]
+examples = [
+    "fadtk==1.0.1",
+    "cdpam",
+    "descript-audio-codec==1.0.0",
+    "kymatio",
 ]
 
 [build-system]
