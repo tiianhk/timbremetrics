@@ -43,6 +43,12 @@ for label, start, size in zip(block_labels, starts, block_sizes):
         color="black",
     )
 
+cbar = plt.colorbar(scatter, pad=0.02, shrink=0.5, aspect=10)
+cbar.outline.set_visible(False)
+cbar.ax.set_yticklabels([])  # Remove default labels
+cbar.ax.text(0, -0.15, "most similar", ha="center", va="bottom", fontsize=6)
+cbar.ax.text(0, 1.15, "most dissimilar", ha="center", va="top", fontsize=6)
+
 plt.gca().set_aspect("equal")
 plt.ylim(label_y_position - 2, np.max(y))
 plt.axis("off")
