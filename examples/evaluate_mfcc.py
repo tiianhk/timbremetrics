@@ -1,9 +1,13 @@
+import os
 import torch
 import torch.nn as nn
 from torchaudio.transforms import MFCC
 
 from timbremetrics.metrics import TimbreMetric
-from timbremetrics.utils import print_results
+from timbremetrics.utils import print_results, write_results_to_yaml
+from timbremetrics.paths import BASE_DIR
+
+out_file = os.path.join(os.path.dirname(BASE_DIR), "examples/results.yaml")
 
 DEFAULT_SR = 44100
 
@@ -40,8 +44,10 @@ model = mfcc()
 metric = TimbreMetric(model, sample_rate=model.sr)
 res = metric()
 print_results(model.name, res)
+write_results_to_yaml(out_file, model.name, res)
 
 model = mfcc(keep_time_dimension=True)
 metric = TimbreMetric(model, sample_rate=model.sr, pad_to_max_duration=True)
 res = metric()
 print_results(model.name, res)
+write_results_to_yaml(out_file, model.name, res)

@@ -120,3 +120,19 @@ def print_results(model_name, results):
         for metric, value in metrics.items():
             print(f"        {metric}: {value.item():.4f}")
     print()
+
+
+def write_results_to_yaml(fn, model_name, results):
+    for k, v in results.items():
+        results[k] = {kk: vv.item() for kk, vv in v.items()}
+    import yaml
+
+    try:
+        with open(fn, "r") as f:
+            data = yaml.safe_load(f) or {}
+    except FileNotFoundError:
+        data = {}
+    assert model_name not in data, f"{model_name} already exists in {fn}"
+    data[model_name] = results
+    with open(fn, "w") as f:
+        yaml.dump(data, f)

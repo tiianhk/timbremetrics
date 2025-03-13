@@ -1,11 +1,15 @@
+import os
 import torch
 import torch.nn as nn
 
 from timbremetrics.metrics import TimbreMetric
-from timbremetrics.utils import print_results
+from timbremetrics.utils import print_results, write_results_to_yaml
+from timbremetrics.paths import BASE_DIR
+
+out_file = os.path.join(os.path.dirname(BASE_DIR), "examples/results.yaml")
 
 
-class MultiScaleSpec(nn.Module):
+class MultiScaleSpectrogram(nn.Module):
     """DDSP https://arxiv.org/abs/2001.04643v1"""
 
     def __init__(
@@ -41,12 +45,14 @@ class MultiScaleSpec(nn.Module):
         return torch.cat([specs, log_specs], dim=1)
 
 
-model = MultiScaleSpec()
+model = MultiScaleSpectrogram()
 metric = TimbreMetric(model)
 res = metric()
 print_results(model.name, res)
+write_results_to_yaml(out_file, model.name, res)
 
-model = MultiScaleSpec(keep_time_dimension=True)
+model = MultiScaleSpectrogram(keep_time_dimension=True)
 metric = TimbreMetric(model, pad_to_max_duration=True)
 res = metric()
 print_results(model.name, res)
+write_results_to_yaml(out_file, model.name, res)
