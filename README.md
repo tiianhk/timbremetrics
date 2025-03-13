@@ -12,14 +12,15 @@ These values represent perceptual timbre similarity, as in nearly all cases, pai
 ```
 pip install git+https://github.com/tiianhk/timbremetrics.git
 ```
-To install as an editable package, first git clone this repo and open its directory, then say
+To install as an editable package, first git clone this repository and open its directory, then say
 ```
 pip install -e .
 ```
-To install with extra dependencies to evaluate pre-trained models and DSP models, say
+To install with extra dependencies to evaluate pre-trained models, DSP models, and to visualize, say
 ```
 pip install -e .[extra]
 ```
+To evaluate models loaded by [fadtk](https://github.com/microsoft/fadtk), Python version 3.11.6 is recommanded.
 
 ## Usage
 ```
