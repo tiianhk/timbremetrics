@@ -24,8 +24,8 @@ class mfcc(nn.Module):
             [
                 f"{self.__class__.__name__}",
                 f"keep_time_dimension={keep_time_dimension}",
-                f"sample_rate={sample_rate}",
-                f"melkwargs={melkwargs}",
+                f"nfft={melkwargs['n_fft']}",
+                f"hop_length={melkwargs['hop_length']}",
             ]
         )
         self.keep_time_dimension = keep_time_dimension

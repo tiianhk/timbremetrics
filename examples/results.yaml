@@ -498,7 +498,7 @@ jtfs, J=10, Q=(8, 2), J_fr=5, Q_fr=2, T=44100, F=16, keep_time_dimension=True:
     ndcg_retrieve_sim: 0.8836503624916077
     spearman_corr: 0.27921849489212036
     triplet_agreement: 0.6406118869781494
-'mfcc, keep_time_dimension=False, sample_rate=44100, melkwargs={''n_fft'': 2048, ''hop_length'': 512}':
+mfcc, keep_time_dimension=False, nfft=2048, hop_length=512:
   cosine:
     kendall_corr: 0.30262288451194763
     mae: 0.3259778320789337
@@ -523,7 +523,7 @@ jtfs, J=10, Q=(8, 2), J_fr=5, Q_fr=2, T=44100, F=16, keep_time_dimension=True:
     ndcg_retrieve_sim: 0.8916927576065063
     spearman_corr: 0.35736745595932007
     triplet_agreement: 0.675319254398346
-'mfcc, keep_time_dimension=True, sample_rate=44100, melkwargs={''n_fft'': 2048, ''hop_length'': 512}':
+mfcc, keep_time_dimension=True, nfft=2048, hop_length=512:
   cosine:
     kendall_corr: 0.35057905316352844
     mae: 0.2806796431541443
