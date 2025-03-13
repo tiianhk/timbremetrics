@@ -1,7 +1,4 @@
 import os
-
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-
 import torch
 import torch.nn as nn
 from kymatio.torch import TimeFrequencyScattering
@@ -20,21 +17,11 @@ class jtfs(nn.Module):
         self, J, Q, J_fr, Q_fr, T, F, keep_time_dimension=False, fixed_duration=2.0
     ):
         super().__init__()
-        self.name = ", ".join(
-            [
-                f"{self.__class__.__name__}",
-                f"J={J}",
-                f"Q={Q}",
-                f"J_fr={J_fr}",
-                f"Q_fr={Q_fr}",
-                f"T={T}",
-                f"F={F}",
-                f"keep_time_dimension={keep_time_dimension}",
-            ]
-        )
+        class_name = self.__class__.__name__
+        self.name = class_name if keep_time_dimension else f"time_avg_{class_name}"
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.keep_time_dimension = keep_time_dimension
-        # it is better to fix a duration since T needs to be larger than any input number of samples
+        # fix a duration since T has to be smaller than any input lengths
         self.fixed_duration = fixed_duration
         self.transform = TimeFrequencyScattering(
             shape=(int(self.fixed_duration * DEFAULT_SR),),

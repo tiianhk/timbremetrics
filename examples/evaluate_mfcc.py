@@ -20,14 +20,8 @@ class mfcc(nn.Module):
         melkwargs={"n_fft": 2048, "hop_length": 512},
     ):
         super().__init__()
-        self.name = ", ".join(
-            [
-                f"{self.__class__.__name__}",
-                f"keep_time_dimension={keep_time_dimension}",
-                f"nfft={melkwargs['n_fft']}",
-                f"hop_length={melkwargs['hop_length']}",
-            ]
-        )
+        class_name = self.__class__.__name__
+        self.name = class_name if keep_time_dimension else f"time_avg_{class_name}"
         self.keep_time_dimension = keep_time_dimension
         self.sr = sample_rate
         self.melkwargs = melkwargs

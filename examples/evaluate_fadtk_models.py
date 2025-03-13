@@ -1,7 +1,4 @@
 import os
-
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-
 from fadtk.model_loader import *
 from timbremetrics.metrics import TimbreMetric
 from timbremetrics.utils import print_results, write_results_to_yaml
@@ -46,7 +43,7 @@ for model in models:
             pad_to_max_duration=False,
         )
         res = metric()
-        write_results_to_yaml(out_file, model.name + ", keep_time_dimension=False", res)
+        write_results_to_yaml(out_file, f"time_avg_{model.name}", res)
 
         metric = TimbreMetric(
             model,
@@ -55,7 +52,7 @@ for model in models:
             pad_to_max_duration=True,
         )
         res = metric()
-        write_results_to_yaml(out_file, model.name + ", keep_time_dimension=True", res)
+        write_results_to_yaml(out_file, model.name, res)
 
     except Exception as e:
         err[model.name] = str(e)
