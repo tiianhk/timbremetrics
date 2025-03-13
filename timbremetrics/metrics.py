@@ -51,7 +51,7 @@ def spearman_corr(pred: Tensor, true: Tensor) -> Tensor:
 
 def kendall_corr(pred: Tensor, true: Tensor) -> Tensor:
     pred, true = _prepare_rank_scores(pred, true)
-    return kendall_rank_corrcoef(pred.T, true.T).sum()
+    return torch.nansum(kendall_rank_corrcoef(pred.T, true.T))
 
 
 def _compute_triplet_agreement_one_anchor(

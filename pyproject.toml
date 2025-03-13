@@ -17,6 +17,7 @@ dev = [
 scripts = [
     "scipy",
     "matplotlib",
+    "pyyaml",
 ]
 examples = [
     "fadtk==1.0.1",

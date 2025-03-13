@@ -124,7 +124,7 @@ def print_results(model_name, results):
 
 def write_results_to_yaml(fn, model_name, results):
     for k, v in results.items():
-        results[k] = {kk: vv.item() for kk, vv in v.items()}
+        results[k] = {kk: round(vv.item(), 3) for kk, vv in v.items()}
     import yaml
 
     try:
@@ -132,7 +132,7 @@ def write_results_to_yaml(fn, model_name, results):
             data = yaml.safe_load(f) or {}
     except FileNotFoundError:
         data = {}
-    assert model_name not in data, f"{model_name} already exists in {fn}"
+
     data[model_name] = results
     with open(fn, "w") as f:
         yaml.dump(data, f)

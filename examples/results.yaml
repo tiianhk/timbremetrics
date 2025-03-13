@@ -1,650 +1,650 @@
 MultiScaleSpectrogram, keep_time_dimension=False, fft_sizes=(4096, 2048, 1024, 512, 256, 128):
   cosine:
-    kendall_corr: 0.21566466987133026
-    mae: 0.3322066068649292
-    ndcg_retrieve_sim: 0.8833556771278381
-    spearman_corr: 0.2890322208404541
-    triplet_agreement: 0.643294632434845
+    kendall_corr: 0.216
+    mae: 0.332
+    ndcg_retrieve_sim: 0.883
+    spearman_corr: 0.289
+    triplet_agreement: 0.643
   l1:
-    kendall_corr: 0.2242375612258911
-    mae: 0.25069481134414673
-    ndcg_retrieve_sim: 0.8853484988212585
-    spearman_corr: 0.3079353868961334
-    triplet_agreement: 0.6494232416152954
+    kendall_corr: 0.224
+    mae: 0.251
+    ndcg_retrieve_sim: 0.885
+    spearman_corr: 0.308
+    triplet_agreement: 0.649
   l2:
-    kendall_corr: 0.19767612218856812
-    mae: 0.25281620025634766
-    ndcg_retrieve_sim: 0.8832284808158875
-    spearman_corr: 0.2654026746749878
-    triplet_agreement: 0.6323144435882568
+    kendall_corr: 0.198
+    mae: 0.253
+    ndcg_retrieve_sim: 0.883
+    spearman_corr: 0.265
+    triplet_agreement: 0.632
   poincare:
-    kendall_corr: 0.21953733265399933
-    mae: 0.21287404000759125
-    ndcg_retrieve_sim: 0.8854634165763855
-    spearman_corr: 0.29314082860946655
-    triplet_agreement: 0.6458866596221924
+    kendall_corr: 0.215
+    mae: 0.274
+    ndcg_retrieve_sim: 0.883
+    spearman_corr: 0.288
+    triplet_agreement: 0.636
 MultiScaleSpectrogram, keep_time_dimension=True, fft_sizes=(4096, 2048, 1024, 512, 256, 128):
   cosine:
-    kendall_corr: 0.24199345707893372
-    mae: 0.26460516452789307
-    ndcg_retrieve_sim: 0.8907804489135742
-    spearman_corr: 0.3228393793106079
-    triplet_agreement: 0.6578466892242432
+    kendall_corr: 0.242
+    mae: 0.265
+    ndcg_retrieve_sim: 0.891
+    spearman_corr: 0.323
+    triplet_agreement: 0.658
   l1:
-    kendall_corr: 0.22562910616397858
-    mae: 0.21207545697689056
-    ndcg_retrieve_sim: 0.8845835328102112
-    spearman_corr: 0.30715999007225037
-    triplet_agreement: 0.6499861478805542
+    kendall_corr: 0.226
+    mae: 0.212
+    ndcg_retrieve_sim: 0.885
+    spearman_corr: 0.307
+    triplet_agreement: 0.65
   l2:
-    kendall_corr: 0.22940045595169067
-    mae: 0.20464585721492767
-    ndcg_retrieve_sim: 0.8907772302627563
-    spearman_corr: 0.3075312674045563
-    triplet_agreement: 0.6496175527572632
+    kendall_corr: 0.229
+    mae: 0.205
+    ndcg_retrieve_sim: 0.891
+    spearman_corr: 0.308
+    triplet_agreement: 0.65
   poincare:
-    kendall_corr: 0.22527892887592316
-    mae: 0.19093072414398193
-    ndcg_retrieve_sim: 0.8882814645767212
-    spearman_corr: 0.301381379365921
-    triplet_agreement: 0.647047221660614
+    kendall_corr: 0.173
+    mae: 0.263
+    ndcg_retrieve_sim: 0.873
+    spearman_corr: 0.232
+    triplet_agreement: 0.605
 cdpam-acoustic, keep_time_dimension=False:
   cosine:
-    kendall_corr: 0.1893717646598816
-    mae: 0.28148773312568665
-    ndcg_retrieve_sim: 0.8747191429138184
-    spearman_corr: 0.2613767385482788
-    triplet_agreement: 0.6252166032791138
+    kendall_corr: 0.189
+    mae: 0.281
+    ndcg_retrieve_sim: 0.875
+    spearman_corr: 0.261
+    triplet_agreement: 0.625
   l1:
-    kendall_corr: 0.19762246310710907
-    mae: 0.19003699719905853
-    ndcg_retrieve_sim: 0.8777273297309875
-    spearman_corr: 0.2702314555644989
-    triplet_agreement: 0.6309113502502441
+    kendall_corr: 0.198
+    mae: 0.19
+    ndcg_retrieve_sim: 0.878
+    spearman_corr: 0.27
+    triplet_agreement: 0.631
   l2:
-    kendall_corr: 0.18723101913928986
-    mae: 0.18586325645446777
-    ndcg_retrieve_sim: 0.8746052980422974
-    spearman_corr: 0.257053405046463
-    triplet_agreement: 0.6231657266616821
+    kendall_corr: 0.187
+    mae: 0.186
+    ndcg_retrieve_sim: 0.875
+    spearman_corr: 0.257
+    triplet_agreement: 0.623
   poincare:
-    kendall_corr: 0.0319218710064888
-    mae: .nan
-    ndcg_retrieve_sim: .nan
-    spearman_corr: 0.021040290594100952
-    triplet_agreement: 0.2459806501865387
+    kendall_corr: 0.184
+    mae: 0.18
+    ndcg_retrieve_sim: 0.875
+    spearman_corr: 0.252
+    triplet_agreement: 0.621
 cdpam-acoustic, keep_time_dimension=True:
   cosine:
-    kendall_corr: 0.1897018402814865
-    mae: 0.27226319909095764
-    ndcg_retrieve_sim: 0.874533474445343
-    spearman_corr: 0.2605685889720917
-    triplet_agreement: 0.6247276067733765
+    kendall_corr: 0.19
+    mae: 0.272
+    ndcg_retrieve_sim: 0.875
+    spearman_corr: 0.261
+    triplet_agreement: 0.625
   l1:
-    kendall_corr: 0.1929115206003189
-    mae: 0.18354812264442444
-    ndcg_retrieve_sim: 0.8768659830093384
-    spearman_corr: 0.2645620107650757
-    triplet_agreement: 0.6279636025428772
+    kendall_corr: 0.193
+    mae: 0.184
+    ndcg_retrieve_sim: 0.877
+    spearman_corr: 0.265
+    triplet_agreement: 0.628
   l2:
-    kendall_corr: 0.1897018402814865
-    mae: 0.18062004446983337
-    ndcg_retrieve_sim: 0.874533474445343
-    spearman_corr: 0.2605685889720917
-    triplet_agreement: 0.6247276067733765
+    kendall_corr: 0.19
+    mae: 0.181
+    ndcg_retrieve_sim: 0.875
+    spearman_corr: 0.261
+    triplet_agreement: 0.625
   poincare:
-    kendall_corr: 0.11379138380289078
-    mae: .nan
-    ndcg_retrieve_sim: .nan
-    spearman_corr: 0.13409985601902008
-    triplet_agreement: 0.32582440972328186
+    kendall_corr: 0.19
+    mae: 0.2
+    ndcg_retrieve_sim: 0.875
+    spearman_corr: 0.261
+    triplet_agreement: 0.625
 cdpam-content, keep_time_dimension=False:
   cosine:
-    kendall_corr: 0.18740665912628174
-    mae: 0.26349955797195435
-    ndcg_retrieve_sim: 0.8761063814163208
-    spearman_corr: 0.2552255094051361
-    triplet_agreement: 0.6226375102996826
+    kendall_corr: 0.187
+    mae: 0.263
+    ndcg_retrieve_sim: 0.876
+    spearman_corr: 0.255
+    triplet_agreement: 0.623
   l1:
-    kendall_corr: 0.18703757226467133
-    mae: 0.19297830760478973
-    ndcg_retrieve_sim: 0.8765601515769958
-    spearman_corr: 0.2532947063446045
-    triplet_agreement: 0.6212885975837708
+    kendall_corr: 0.187
+    mae: 0.193
+    ndcg_retrieve_sim: 0.877
+    spearman_corr: 0.253
+    triplet_agreement: 0.621
   l2:
-    kendall_corr: 0.1830078512430191
-    mae: 0.19132000207901
-    ndcg_retrieve_sim: 0.8756239414215088
-    spearman_corr: 0.24897347390651703
-    triplet_agreement: 0.6197109818458557
+    kendall_corr: 0.183
+    mae: 0.191
+    ndcg_retrieve_sim: 0.876
+    spearman_corr: 0.249
+    triplet_agreement: 0.62
   poincare:
-    kendall_corr: 0.026598159223794937
-    mae: .nan
-    ndcg_retrieve_sim: .nan
-    spearman_corr: 0.02086619846522808
-    triplet_agreement: 0.2168360948562622
+    kendall_corr: 0.176
+    mae: 0.19
+    ndcg_retrieve_sim: 0.875
+    spearman_corr: 0.24
+    triplet_agreement: 0.615
 cdpam-content, keep_time_dimension=True:
   cosine:
-    kendall_corr: 0.18736696243286133
-    mae: 0.25630199909210205
-    ndcg_retrieve_sim: 0.8770078420639038
-    spearman_corr: 0.2573671340942383
-    triplet_agreement: 0.6239136457443237
+    kendall_corr: 0.187
+    mae: 0.256
+    ndcg_retrieve_sim: 0.877
+    spearman_corr: 0.257
+    triplet_agreement: 0.624
   l1:
-    kendall_corr: 0.1919894814491272
-    mae: 0.18611586093902588
-    ndcg_retrieve_sim: 0.8770982027053833
-    spearman_corr: 0.26020464301109314
-    triplet_agreement: 0.6258127689361572
+    kendall_corr: 0.192
+    mae: 0.186
+    ndcg_retrieve_sim: 0.877
+    spearman_corr: 0.26
+    triplet_agreement: 0.626
   l2:
-    kendall_corr: 0.18736696243286133
-    mae: 0.1815788596868515
-    ndcg_retrieve_sim: 0.8770078420639038
-    spearman_corr: 0.2573671340942383
-    triplet_agreement: 0.6239136457443237
+    kendall_corr: 0.187
+    mae: 0.182
+    ndcg_retrieve_sim: 0.877
+    spearman_corr: 0.257
+    triplet_agreement: 0.624
   poincare:
-    kendall_corr: 0.09747933596372604
-    mae: .nan
-    ndcg_retrieve_sim: .nan
-    spearman_corr: 0.11321050673723221
-    triplet_agreement: 0.316457062959671
+    kendall_corr: 0.187
+    mae: 0.21
+    ndcg_retrieve_sim: 0.877
+    spearman_corr: 0.257
+    triplet_agreement: 0.624
 clap-2023, keep_time_dimension=False:
   cosine:
-    kendall_corr: 0.34351107478141785
-    mae: 0.1908760517835617
-    ndcg_retrieve_sim: 0.9145264029502869
-    spearman_corr: 0.4430979788303375
-    triplet_agreement: 0.7224451303482056
+    kendall_corr: 0.344
+    mae: 0.191
+    ndcg_retrieve_sim: 0.915
+    spearman_corr: 0.443
+    triplet_agreement: 0.722
   l1:
-    kendall_corr: 0.34085461497306824
-    mae: 0.15304848551750183
-    ndcg_retrieve_sim: 0.9147334098815918
-    spearman_corr: 0.44072845578193665
-    triplet_agreement: 0.7207690477371216
+    kendall_corr: 0.341
+    mae: 0.153
+    ndcg_retrieve_sim: 0.915
+    spearman_corr: 0.441
+    triplet_agreement: 0.721
   l2:
-    kendall_corr: 0.343764066696167
-    mae: 0.15261083841323853
-    ndcg_retrieve_sim: 0.9148247241973877
-    spearman_corr: 0.4432191550731659
-    triplet_agreement: 0.72291499376297
+    kendall_corr: 0.344
+    mae: 0.153
+    ndcg_retrieve_sim: 0.915
+    spearman_corr: 0.443
+    triplet_agreement: 0.723
   poincare:
-    kendall_corr: 0.3384867310523987
-    mae: 0.15239717066287994
-    ndcg_retrieve_sim: 0.9139933586120605
-    spearman_corr: 0.4360029995441437
-    triplet_agreement: 0.7189262509346008
+    kendall_corr: 0.343
+    mae: 0.308
+    ndcg_retrieve_sim: 0.914
+    spearman_corr: 0.442
+    triplet_agreement: 0.72
 clap-2023, keep_time_dimension=True:
   cosine:
-    kendall_corr: 0.33297666907310486
-    mae: 0.18913498520851135
-    ndcg_retrieve_sim: 0.9131042957305908
-    spearman_corr: 0.43135878443717957
-    triplet_agreement: 0.7160788774490356
+    kendall_corr: 0.333
+    mae: 0.189
+    ndcg_retrieve_sim: 0.913
+    spearman_corr: 0.431
+    triplet_agreement: 0.716
   l1:
-    kendall_corr: 0.32982897758483887
-    mae: 0.16006998717784882
-    ndcg_retrieve_sim: 0.9130449891090393
-    spearman_corr: 0.4265396296977997
-    triplet_agreement: 0.7132275700569153
+    kendall_corr: 0.33
+    mae: 0.16
+    ndcg_retrieve_sim: 0.913
+    spearman_corr: 0.427
+    triplet_agreement: 0.713
   l2:
-    kendall_corr: 0.3322161138057709
-    mae: 0.1585337519645691
-    ndcg_retrieve_sim: 0.9131274223327637
-    spearman_corr: 0.4305135905742645
-    triplet_agreement: 0.71565181016922
+    kendall_corr: 0.332
+    mae: 0.159
+    ndcg_retrieve_sim: 0.913
+    spearman_corr: 0.431
+    triplet_agreement: 0.716
   poincare:
-    kendall_corr: 0.33312055468559265
-    mae: 0.15852981805801392
-    ndcg_retrieve_sim: 0.9130228757858276
-    spearman_corr: 0.43087586760520935
-    triplet_agreement: 0.7162244319915771
+    kendall_corr: 0.333
+    mae: 0.311
+    ndcg_retrieve_sim: 0.913
+    spearman_corr: 0.43
+    triplet_agreement: 0.711
 clap-laion-audio, keep_time_dimension=False:
   cosine:
-    kendall_corr: 0.34396883845329285
-    mae: 0.19985389709472656
-    ndcg_retrieve_sim: 0.9112327694892883
-    spearman_corr: 0.4432086646556854
-    triplet_agreement: 0.7206130623817444
+    kendall_corr: 0.344
+    mae: 0.2
+    ndcg_retrieve_sim: 0.911
+    spearman_corr: 0.443
+    triplet_agreement: 0.721
   l1:
-    kendall_corr: 0.3424746096134186
-    mae: 0.15150964260101318
-    ndcg_retrieve_sim: 0.9106887578964233
-    spearman_corr: 0.44206634163856506
-    triplet_agreement: 0.7210803627967834
+    kendall_corr: 0.342
+    mae: 0.152
+    ndcg_retrieve_sim: 0.911
+    spearman_corr: 0.442
+    triplet_agreement: 0.721
   l2:
-    kendall_corr: 0.3428543508052826
-    mae: 0.15205609798431396
-    ndcg_retrieve_sim: 0.9113097786903381
-    spearman_corr: 0.4435175955295563
-    triplet_agreement: 0.7211084365844727
+    kendall_corr: 0.343
+    mae: 0.152
+    ndcg_retrieve_sim: 0.911
+    spearman_corr: 0.444
+    triplet_agreement: 0.721
   poincare:
-    kendall_corr: 0.10437069088220596
-    mae: .nan
-    ndcg_retrieve_sim: .nan
-    spearman_corr: 0.11765242367982864
-    triplet_agreement: 0.29454147815704346
+    kendall_corr: 0.337
+    mae: 0.174
+    ndcg_retrieve_sim: 0.91
+    spearman_corr: 0.436
+    triplet_agreement: 0.717
 clap-laion-audio, keep_time_dimension=True:
   cosine:
-    kendall_corr: 0.33521923422813416
-    mae: 0.18719953298568726
-    ndcg_retrieve_sim: 0.909325897693634
-    spearman_corr: 0.4345758855342865
-    triplet_agreement: 0.7146548628807068
+    kendall_corr: 0.335
+    mae: 0.187
+    ndcg_retrieve_sim: 0.909
+    spearman_corr: 0.435
+    triplet_agreement: 0.715
   l1:
-    kendall_corr: 0.33330777287483215
-    mae: 0.15527600049972534
-    ndcg_retrieve_sim: 0.909443736076355
-    spearman_corr: 0.43304896354675293
-    triplet_agreement: 0.7147397994995117
+    kendall_corr: 0.333
+    mae: 0.155
+    ndcg_retrieve_sim: 0.909
+    spearman_corr: 0.433
+    triplet_agreement: 0.715
   l2:
-    kendall_corr: 0.33521923422813416
-    mae: 0.1561974138021469
-    ndcg_retrieve_sim: 0.909325897693634
-    spearman_corr: 0.4345758855342865
-    triplet_agreement: 0.7146548628807068
+    kendall_corr: 0.335
+    mae: 0.156
+    ndcg_retrieve_sim: 0.909
+    spearman_corr: 0.435
+    triplet_agreement: 0.715
   poincare:
-    kendall_corr: 0.18647071719169617
-    mae: .nan
-    ndcg_retrieve_sim: .nan
-    spearman_corr: 0.2237546145915985
-    triplet_agreement: 0.37363201379776
+    kendall_corr: 0.335
+    mae: 0.214
+    ndcg_retrieve_sim: 0.909
+    spearman_corr: 0.435
+    triplet_agreement: 0.715
 clap-laion-music, keep_time_dimension=False:
   cosine:
-    kendall_corr: 0.34679365158081055
-    mae: 0.17530588805675507
-    ndcg_retrieve_sim: 0.91234290599823
-    spearman_corr: 0.44809356331825256
-    triplet_agreement: 0.7242929339408875
+    kendall_corr: 0.347
+    mae: 0.175
+    ndcg_retrieve_sim: 0.912
+    spearman_corr: 0.448
+    triplet_agreement: 0.724
   l1:
-    kendall_corr: 0.33888670802116394
-    mae: 0.16301006078720093
-    ndcg_retrieve_sim: 0.911332905292511
-    spearman_corr: 0.44047003984451294
-    triplet_agreement: 0.7204875946044922
+    kendall_corr: 0.339
+    mae: 0.163
+    ndcg_retrieve_sim: 0.911
+    spearman_corr: 0.44
+    triplet_agreement: 0.72
   l2:
-    kendall_corr: 0.3398797810077667
-    mae: 0.1624380648136139
-    ndcg_retrieve_sim: 0.9113839268684387
-    spearman_corr: 0.440977543592453
-    triplet_agreement: 0.7208038568496704
+    kendall_corr: 0.34
+    mae: 0.162
+    ndcg_retrieve_sim: 0.911
+    spearman_corr: 0.441
+    triplet_agreement: 0.721
   poincare:
-    kendall_corr: 0.07248953729867935
-    mae: .nan
-    ndcg_retrieve_sim: .nan
-    spearman_corr: 0.07543474435806274
-    triplet_agreement: 0.27449843287467957
+    kendall_corr: 0.332
+    mae: 0.19
+    ndcg_retrieve_sim: 0.911
+    spearman_corr: 0.432
+    triplet_agreement: 0.716
 clap-laion-music, keep_time_dimension=True:
   cosine:
-    kendall_corr: 0.3467700183391571
-    mae: 0.16747236251831055
-    ndcg_retrieve_sim: 0.9121125936508179
-    spearman_corr: 0.4479442238807678
-    triplet_agreement: 0.7235920429229736
+    kendall_corr: 0.347
+    mae: 0.167
+    ndcg_retrieve_sim: 0.912
+    spearman_corr: 0.448
+    triplet_agreement: 0.724
   l1:
-    kendall_corr: 0.3418174982070923
-    mae: 0.16367708146572113
-    ndcg_retrieve_sim: 0.9123125076293945
-    spearman_corr: 0.4424281418323517
-    triplet_agreement: 0.7204317450523376
+    kendall_corr: 0.342
+    mae: 0.164
+    ndcg_retrieve_sim: 0.912
+    spearman_corr: 0.442
+    triplet_agreement: 0.72
   l2:
-    kendall_corr: 0.3467700183391571
-    mae: 0.16662201285362244
-    ndcg_retrieve_sim: 0.9121125936508179
-    spearman_corr: 0.4479442238807678
-    triplet_agreement: 0.7235920429229736
+    kendall_corr: 0.347
+    mae: 0.167
+    ndcg_retrieve_sim: 0.912
+    spearman_corr: 0.448
+    triplet_agreement: 0.724
   poincare:
-    kendall_corr: 0.1856115162372589
-    mae: .nan
-    ndcg_retrieve_sim: .nan
-    spearman_corr: 0.22257553040981293
-    triplet_agreement: 0.37320783734321594
+    kendall_corr: 0.347
+    mae: 0.228
+    ndcg_retrieve_sim: 0.912
+    spearman_corr: 0.448
+    triplet_agreement: 0.724
 dac-44kHz, keep_time_dimension=False:
   cosine:
-    kendall_corr: 0.21216252446174622
-    mae: 0.32858797907829285
-    ndcg_retrieve_sim: 0.8801078796386719
-    spearman_corr: 0.28068017959594727
-    triplet_agreement: 0.6383452415466309
+    kendall_corr: 0.212
+    mae: 0.329
+    ndcg_retrieve_sim: 0.88
+    spearman_corr: 0.281
+    triplet_agreement: 0.638
   l1:
-    kendall_corr: 0.2560814917087555
-    mae: 0.18599367141723633
-    ndcg_retrieve_sim: 0.884436309337616
-    spearman_corr: 0.33374297618865967
-    triplet_agreement: 0.6646349430084229
+    kendall_corr: 0.256
+    mae: 0.186
+    ndcg_retrieve_sim: 0.884
+    spearman_corr: 0.334
+    triplet_agreement: 0.665
   l2:
-    kendall_corr: 0.2572755515575409
-    mae: 0.18811404705047607
-    ndcg_retrieve_sim: 0.8853094577789307
-    spearman_corr: 0.33383750915527344
-    triplet_agreement: 0.6649988889694214
+    kendall_corr: 0.257
+    mae: 0.188
+    ndcg_retrieve_sim: 0.885
+    spearman_corr: 0.334
+    triplet_agreement: 0.665
   poincare:
-    kendall_corr: 0.24980798363685608
-    mae: 0.1875527948141098
-    ndcg_retrieve_sim: 0.8838461637496948
-    spearman_corr: 0.326049268245697
-    triplet_agreement: 0.6616150736808777
+    kendall_corr: 0.212
+    mae: 0.208
+    ndcg_retrieve_sim: 0.88
+    spearman_corr: 0.281
+    triplet_agreement: 0.638
 dac-44kHz, keep_time_dimension=True:
   cosine:
-    kendall_corr: 0.2208440601825714
-    mae: 0.1709979921579361
-    ndcg_retrieve_sim: 0.877832293510437
-    spearman_corr: 0.2958015203475952
-    triplet_agreement: 0.6435332298278809
+    kendall_corr: 0.221
+    mae: 0.171
+    ndcg_retrieve_sim: 0.878
+    spearman_corr: 0.296
+    triplet_agreement: 0.644
   l1:
-    kendall_corr: 0.2115394026041031
-    mae: 0.1963394731283188
-    ndcg_retrieve_sim: 0.8768145442008972
-    spearman_corr: 0.28670769929885864
-    triplet_agreement: 0.638309895992279
+    kendall_corr: 0.212
+    mae: 0.196
+    ndcg_retrieve_sim: 0.877
+    spearman_corr: 0.287
+    triplet_agreement: 0.638
   l2:
-    kendall_corr: 0.2241184413433075
-    mae: 0.19930404424667358
-    ndcg_retrieve_sim: 0.8777766227722168
-    spearman_corr: 0.2996903359889984
-    triplet_agreement: 0.6454440355300903
+    kendall_corr: 0.224
+    mae: 0.199
+    ndcg_retrieve_sim: 0.878
+    spearman_corr: 0.3
+    triplet_agreement: 0.645
   poincare:
-    kendall_corr: 0.21707260608673096
-    mae: 0.20439694821834564
-    ndcg_retrieve_sim: 0.8782647252082825
-    spearman_corr: 0.2923494577407837
-    triplet_agreement: 0.641926109790802
+    kendall_corr: 0.175
+    mae: 0.307
+    ndcg_retrieve_sim: 0.867
+    spearman_corr: 0.241
+    triplet_agreement: 0.613
 encodec-emb, keep_time_dimension=False:
   cosine:
-    kendall_corr: 0.25751960277557373
-    mae: 0.29484787583351135
-    ndcg_retrieve_sim: 0.8887906670570374
-    spearman_corr: 0.3420763909816742
-    triplet_agreement: 0.6682484149932861
+    kendall_corr: 0.258
+    mae: 0.295
+    ndcg_retrieve_sim: 0.889
+    spearman_corr: 0.342
+    triplet_agreement: 0.668
   l1:
-    kendall_corr: 0.26704782247543335
-    mae: 0.18228131532669067
-    ndcg_retrieve_sim: 0.8890078663825989
-    spearman_corr: 0.3537793755531311
-    triplet_agreement: 0.6758591532707214
+    kendall_corr: 0.267
+    mae: 0.182
+    ndcg_retrieve_sim: 0.889
+    spearman_corr: 0.354
+    triplet_agreement: 0.676
   l2:
-    kendall_corr: 0.2689017951488495
-    mae: 0.1811179220676422
-    ndcg_retrieve_sim: 0.889241635799408
-    spearman_corr: 0.35375940799713135
-    triplet_agreement: 0.6757482290267944
+    kendall_corr: 0.269
+    mae: 0.181
+    ndcg_retrieve_sim: 0.889
+    spearman_corr: 0.354
+    triplet_agreement: 0.676
   poincare:
-    kendall_corr: 0.28410863876342773
-    mae: 0.18525445461273193
-    ndcg_retrieve_sim: 0.8917497396469116
-    spearman_corr: 0.37458252906799316
-    triplet_agreement: 0.6859870553016663
+    kendall_corr: 0.258
+    mae: 0.251
+    ndcg_retrieve_sim: 0.889
+    spearman_corr: 0.342
+    triplet_agreement: 0.668
 encodec-emb, keep_time_dimension=True:
   cosine:
-    kendall_corr: 0.24320362508296967
-    mae: 0.1831093281507492
-    ndcg_retrieve_sim: 0.8862819075584412
-    spearman_corr: 0.3314109742641449
-    triplet_agreement: 0.6617524027824402
+    kendall_corr: 0.243
+    mae: 0.183
+    ndcg_retrieve_sim: 0.886
+    spearman_corr: 0.331
+    triplet_agreement: 0.662
   l1:
-    kendall_corr: 0.22194014489650726
-    mae: 0.18630090355873108
-    ndcg_retrieve_sim: 0.882975161075592
-    spearman_corr: 0.30112308263778687
-    triplet_agreement: 0.6469221115112305
+    kendall_corr: 0.222
+    mae: 0.186
+    ndcg_retrieve_sim: 0.883
+    spearman_corr: 0.301
+    triplet_agreement: 0.647
   l2:
-    kendall_corr: 0.23165172338485718
-    mae: 0.18528880178928375
-    ndcg_retrieve_sim: 0.8858410716056824
-    spearman_corr: 0.31557968258857727
-    triplet_agreement: 0.6541310548782349
+    kendall_corr: 0.232
+    mae: 0.185
+    ndcg_retrieve_sim: 0.886
+    spearman_corr: 0.316
+    triplet_agreement: 0.654
   poincare:
-    kendall_corr: 0.2823634445667267
-    mae: 0.17156292498111725
-    ndcg_retrieve_sim: 0.8911839127540588
-    spearman_corr: 0.3818874955177307
-    triplet_agreement: 0.6870579719543457
+    kendall_corr: 0.243
+    mae: 0.31
+    ndcg_retrieve_sim: 0.886
+    spearman_corr: 0.331
+    triplet_agreement: 0.661
 encodec-emb-48k, keep_time_dimension=False:
   cosine:
-    kendall_corr: 0.17319664359092712
-    mae: 0.3267571032047272
-    ndcg_retrieve_sim: 0.8726142644882202
-    spearman_corr: 0.2288992702960968
-    triplet_agreement: 0.6132124066352844
+    kendall_corr: 0.173
+    mae: 0.327
+    ndcg_retrieve_sim: 0.873
+    spearman_corr: 0.229
+    triplet_agreement: 0.613
   l1:
-    kendall_corr: 0.16927576065063477
-    mae: 0.22728140652179718
-    ndcg_retrieve_sim: 0.8731371760368347
-    spearman_corr: 0.22391891479492188
-    triplet_agreement: 0.6113082766532898
+    kendall_corr: 0.169
+    mae: 0.227
+    ndcg_retrieve_sim: 0.873
+    spearman_corr: 0.224
+    triplet_agreement: 0.611
   l2:
-    kendall_corr: 0.16958415508270264
-    mae: 0.22633519768714905
-    ndcg_retrieve_sim: 0.8723241090774536
-    spearman_corr: 0.22305738925933838
-    triplet_agreement: 0.6112223267555237
+    kendall_corr: 0.17
+    mae: 0.226
+    ndcg_retrieve_sim: 0.872
+    spearman_corr: 0.223
+    triplet_agreement: 0.611
   poincare:
-    kendall_corr: 0.18882609903812408
-    mae: 0.20081892609596252
-    ndcg_retrieve_sim: 0.8743038773536682
-    spearman_corr: 0.2522839307785034
-    triplet_agreement: 0.6221733093261719
+    kendall_corr: 0.173
+    mae: 0.256
+    ndcg_retrieve_sim: 0.873
+    spearman_corr: 0.229
+    triplet_agreement: 0.613
 encodec-emb-48k, keep_time_dimension=True:
   cosine:
-    kendall_corr: 0.14920476078987122
-    mae: 0.21971729397773743
-    ndcg_retrieve_sim: 0.865772545337677
-    spearman_corr: 0.19634363055229187
-    triplet_agreement: 0.5998899936676025
+    kendall_corr: 0.149
+    mae: 0.22
+    ndcg_retrieve_sim: 0.866
+    spearman_corr: 0.196
+    triplet_agreement: 0.6
   l1:
-    kendall_corr: 0.13342928886413574
-    mae: 0.2129567563533783
-    ndcg_retrieve_sim: 0.862949788570404
-    spearman_corr: 0.17766079306602478
-    triplet_agreement: 0.5908569097518921
+    kendall_corr: 0.133
+    mae: 0.213
+    ndcg_retrieve_sim: 0.863
+    spearman_corr: 0.178
+    triplet_agreement: 0.591
   l2:
-    kendall_corr: 0.12031499296426773
-    mae: 0.21225377917289734
-    ndcg_retrieve_sim: 0.8596325516700745
-    spearman_corr: 0.158966526389122
-    triplet_agreement: 0.5821248888969421
+    kendall_corr: 0.12
+    mae: 0.212
+    ndcg_retrieve_sim: 0.86
+    spearman_corr: 0.159
+    triplet_agreement: 0.582
   poincare:
-    kendall_corr: 0.1922152191400528
-    mae: 0.21152269840240479
-    ndcg_retrieve_sim: 0.8734983205795288
-    spearman_corr: 0.25633862614631653
-    triplet_agreement: 0.6244642734527588
+    kendall_corr: 0.152
+    mae: 0.313
+    ndcg_retrieve_sim: 0.866
+    spearman_corr: 0.198
+    triplet_agreement: 0.599
 jtfs, J=10, Q=(8, 2), J_fr=5, Q_fr=2, T=44100, F=16, keep_time_dimension=False:
   cosine:
-    kendall_corr: 0.2442270815372467
-    mae: 0.3429047167301178
-    ndcg_retrieve_sim: 0.8852245807647705
-    spearman_corr: 0.3244941234588623
-    triplet_agreement: 0.6559643149375916
+    kendall_corr: 0.244
+    mae: 0.343
+    ndcg_retrieve_sim: 0.885
+    spearman_corr: 0.324
+    triplet_agreement: 0.656
   l1:
-    kendall_corr: 0.25211718678474426
-    mae: 0.2624399662017822
-    ndcg_retrieve_sim: 0.8952562808990479
-    spearman_corr: 0.33566775918006897
-    triplet_agreement: 0.665980339050293
+    kendall_corr: 0.252
+    mae: 0.262
+    ndcg_retrieve_sim: 0.895
+    spearman_corr: 0.336
+    triplet_agreement: 0.666
   l2:
-    kendall_corr: 0.20837436616420746
-    mae: 0.29503095149993896
-    ndcg_retrieve_sim: 0.8835986256599426
-    spearman_corr: 0.27918562293052673
-    triplet_agreement: 0.6406630277633667
+    kendall_corr: 0.208
+    mae: 0.295
+    ndcg_retrieve_sim: 0.884
+    spearman_corr: 0.279
+    triplet_agreement: 0.641
   poincare:
-    kendall_corr: 0.20837436616420746
-    mae: 0.29503288865089417
-    ndcg_retrieve_sim: 0.8835986256599426
-    spearman_corr: 0.27918562293052673
-    triplet_agreement: 0.6406630277633667
+    kendall_corr: 0.208
+    mae: 0.295
+    ndcg_retrieve_sim: 0.884
+    spearman_corr: 0.279
+    triplet_agreement: 0.64
 jtfs, J=10, Q=(8, 2), J_fr=5, Q_fr=2, T=44100, F=16, keep_time_dimension=True:
   cosine:
-    kendall_corr: 0.2468404471874237
-    mae: 0.3415888249874115
-    ndcg_retrieve_sim: 0.8860130310058594
-    spearman_corr: 0.32791173458099365
-    triplet_agreement: 0.6577601432800293
+    kendall_corr: 0.247
+    mae: 0.342
+    ndcg_retrieve_sim: 0.886
+    spearman_corr: 0.328
+    triplet_agreement: 0.658
   l1:
-    kendall_corr: 0.25243696570396423
-    mae: 0.26230403780937195
-    ndcg_retrieve_sim: 0.8953068256378174
-    spearman_corr: 0.33589988946914673
-    triplet_agreement: 0.6661131381988525
+    kendall_corr: 0.252
+    mae: 0.262
+    ndcg_retrieve_sim: 0.895
+    spearman_corr: 0.336
+    triplet_agreement: 0.666
   l2:
-    kendall_corr: 0.20855987071990967
-    mae: 0.2947827875614166
-    ndcg_retrieve_sim: 0.8836503624916077
-    spearman_corr: 0.27921849489212036
-    triplet_agreement: 0.6406118869781494
+    kendall_corr: 0.209
+    mae: 0.295
+    ndcg_retrieve_sim: 0.884
+    spearman_corr: 0.279
+    triplet_agreement: 0.641
   poincare:
-    kendall_corr: 0.20855987071990967
-    mae: 0.2947886884212494
-    ndcg_retrieve_sim: 0.8836503624916077
-    spearman_corr: 0.27921849489212036
-    triplet_agreement: 0.6406118869781494
+    kendall_corr: 0.209
+    mae: 0.295
+    ndcg_retrieve_sim: 0.884
+    spearman_corr: 0.279
+    triplet_agreement: 0.64
 mfcc, keep_time_dimension=False, nfft=2048, hop_length=512:
   cosine:
-    kendall_corr: 0.30262288451194763
-    mae: 0.3259778320789337
-    ndcg_retrieve_sim: 0.8949946165084839
-    spearman_corr: 0.3945702314376831
-    triplet_agreement: 0.6960691213607788
+    kendall_corr: 0.303
+    mae: 0.326
+    ndcg_retrieve_sim: 0.895
+    spearman_corr: 0.395
+    triplet_agreement: 0.696
   l1:
-    kendall_corr: 0.29552221298217773
-    mae: 0.16479499638080597
-    ndcg_retrieve_sim: 0.8953291773796082
-    spearman_corr: 0.390685111284256
-    triplet_agreement: 0.6951932907104492
+    kendall_corr: 0.296
+    mae: 0.165
+    ndcg_retrieve_sim: 0.895
+    spearman_corr: 0.391
+    triplet_agreement: 0.695
   l2:
-    kendall_corr: 0.289946049451828
-    mae: 0.18879759311676025
-    ndcg_retrieve_sim: 0.892446756362915
-    spearman_corr: 0.3825328052043915
-    triplet_agreement: 0.6905632019042969
+    kendall_corr: 0.29
+    mae: 0.189
+    ndcg_retrieve_sim: 0.892
+    spearman_corr: 0.383
+    triplet_agreement: 0.691
   poincare:
-    kendall_corr: 0.26994574069976807
-    mae: 0.2234603613615036
-    ndcg_retrieve_sim: 0.8916927576065063
-    spearman_corr: 0.35736745595932007
-    triplet_agreement: 0.675319254398346
+    kendall_corr: 0.303
+    mae: 0.264
+    ndcg_retrieve_sim: 0.895
+    spearman_corr: 0.396
+    triplet_agreement: 0.686
 mfcc, keep_time_dimension=True, nfft=2048, hop_length=512:
   cosine:
-    kendall_corr: 0.35057905316352844
-    mae: 0.2806796431541443
-    ndcg_retrieve_sim: 0.9068277478218079
-    spearman_corr: 0.45084601640701294
-    triplet_agreement: 0.7259146571159363
+    kendall_corr: 0.351
+    mae: 0.281
+    ndcg_retrieve_sim: 0.907
+    spearman_corr: 0.451
+    triplet_agreement: 0.726
   l1:
-    kendall_corr: 0.31677010655403137
-    mae: 0.15715903043746948
-    ndcg_retrieve_sim: 0.902344286441803
-    spearman_corr: 0.4108867049217224
-    triplet_agreement: 0.7051981091499329
+    kendall_corr: 0.317
+    mae: 0.157
+    ndcg_retrieve_sim: 0.902
+    spearman_corr: 0.411
+    triplet_agreement: 0.705
   l2:
-    kendall_corr: 0.3416101038455963
-    mae: 0.16791166365146637
-    ndcg_retrieve_sim: 0.9052648544311523
-    spearman_corr: 0.4416716396808624
-    triplet_agreement: 0.7220662832260132
+    kendall_corr: 0.342
+    mae: 0.168
+    ndcg_retrieve_sim: 0.905
+    spearman_corr: 0.442
+    triplet_agreement: 0.722
   poincare:
-    kendall_corr: 0.3185005784034729
-    mae: 0.19286836683750153
-    ndcg_retrieve_sim: 0.901806116104126
-    spearman_corr: 0.41275733709335327
-    triplet_agreement: 0.7047306895256042
+    kendall_corr: 0.349
+    mae: 0.281
+    ndcg_retrieve_sim: 0.906
+    spearman_corr: 0.448
+    triplet_agreement: 0.709
 w2v2-large-12, keep_time_dimension=False:
   cosine:
-    kendall_corr: 0.16809570789337158
-    mae: 0.1907755583524704
-    ndcg_retrieve_sim: 0.8762156963348389
-    spearman_corr: 0.22873176634311676
-    triplet_agreement: 0.6128062009811401
+    kendall_corr: 0.168
+    mae: 0.191
+    ndcg_retrieve_sim: 0.876
+    spearman_corr: 0.229
+    triplet_agreement: 0.613
   l1:
-    kendall_corr: 0.1281740963459015
-    mae: 0.1874845176935196
-    ndcg_retrieve_sim: 0.8651055693626404
-    spearman_corr: 0.17149531841278076
-    triplet_agreement: 0.5864003896713257
+    kendall_corr: 0.128
+    mae: 0.187
+    ndcg_retrieve_sim: 0.865
+    spearman_corr: 0.171
+    triplet_agreement: 0.586
   l2:
-    kendall_corr: 0.140543594956398
-    mae: 0.18515680730342865
-    ndcg_retrieve_sim: 0.867742657661438
-    spearman_corr: 0.19011075794696808
-    triplet_agreement: 0.5950323343276978
+    kendall_corr: 0.141
+    mae: 0.185
+    ndcg_retrieve_sim: 0.868
+    spearman_corr: 0.19
+    triplet_agreement: 0.595
   poincare:
-    kendall_corr: 0.18494349718093872
-    mae: 0.1862020194530487
-    ndcg_retrieve_sim: 0.877345085144043
-    spearman_corr: 0.24820682406425476
-    triplet_agreement: 0.6209143400192261
+    kendall_corr: 0.168
+    mae: 0.324
+    ndcg_retrieve_sim: 0.876
+    spearman_corr: 0.23
+    triplet_agreement: 0.606
 w2v2-large-12, keep_time_dimension=True:
   cosine:
-    kendall_corr: 0.2095748484134674
-    mae: 0.18489287793636322
-    ndcg_retrieve_sim: 0.8792666792869568
-    spearman_corr: 0.2811444401741028
-    triplet_agreement: 0.6368714570999146
+    kendall_corr: 0.21
+    mae: 0.185
+    ndcg_retrieve_sim: 0.879
+    spearman_corr: 0.281
+    triplet_agreement: 0.637
   l1:
-    kendall_corr: 0.16418969631195068
-    mae: 0.2337961196899414
-    ndcg_retrieve_sim: 0.8722971677780151
-    spearman_corr: 0.22222912311553955
-    triplet_agreement: 0.6080580353736877
+    kendall_corr: 0.164
+    mae: 0.234
+    ndcg_retrieve_sim: 0.872
+    spearman_corr: 0.222
+    triplet_agreement: 0.608
   l2:
-    kendall_corr: 0.1912887841463089
-    mae: 0.23031200468540192
-    ndcg_retrieve_sim: 0.8751088380813599
-    spearman_corr: 0.2592860758304596
-    triplet_agreement: 0.6249799728393555
+    kendall_corr: 0.191
+    mae: 0.23
+    ndcg_retrieve_sim: 0.875
+    spearman_corr: 0.259
+    triplet_agreement: 0.625
   poincare:
-    kendall_corr: 0.20564943552017212
-    mae: 0.23163150250911713
-    ndcg_retrieve_sim: 0.8799416422843933
-    spearman_corr: 0.2780613899230957
-    triplet_agreement: 0.6352340579032898
+    kendall_corr: 0.196
+    mae: 0.345
+    ndcg_retrieve_sim: 0.875
+    spearman_corr: 0.256
+    triplet_agreement: 0.57
 wavlm-large-12, keep_time_dimension=False:
   cosine:
-    kendall_corr: 0.2601848840713501
-    mae: 0.27788305282592773
-    ndcg_retrieve_sim: 0.8981178998947144
-    spearman_corr: 0.34944236278533936
-    triplet_agreement: 0.6742643713951111
+    kendall_corr: 0.26
+    mae: 0.278
+    ndcg_retrieve_sim: 0.898
+    spearman_corr: 0.349
+    triplet_agreement: 0.674
   l1:
-    kendall_corr: 0.2840529978275299
-    mae: 0.18736103177070618
-    ndcg_retrieve_sim: 0.9019923210144043
-    spearman_corr: 0.37721148133277893
-    triplet_agreement: 0.6866485476493835
+    kendall_corr: 0.284
+    mae: 0.187
+    ndcg_retrieve_sim: 0.902
+    spearman_corr: 0.377
+    triplet_agreement: 0.687
   l2:
-    kendall_corr: 0.2684546709060669
-    mae: 0.19511663913726807
-    ndcg_retrieve_sim: 0.8990612626075745
-    spearman_corr: 0.3565247058868408
-    triplet_agreement: 0.6770311594009399
+    kendall_corr: 0.268
+    mae: 0.195
+    ndcg_retrieve_sim: 0.899
+    spearman_corr: 0.357
+    triplet_agreement: 0.677
   poincare:
-    kendall_corr: 0.2577231526374817
-    mae: 0.17699211835861206
-    ndcg_retrieve_sim: 0.8989726305007935
-    spearman_corr: 0.34629425406455994
-    triplet_agreement: 0.6732490658760071
+    kendall_corr: 0.26
+    mae: 0.277
+    ndcg_retrieve_sim: 0.898
+    spearman_corr: 0.349
+    triplet_agreement: 0.674
 wavlm-large-12, keep_time_dimension=True:
   cosine:
-    kendall_corr: 0.23992404341697693
-    mae: 0.18502065539360046
-    ndcg_retrieve_sim: 0.8890384435653687
-    spearman_corr: 0.32253962755203247
-    triplet_agreement: 0.6584203243255615
+    kendall_corr: 0.24
+    mae: 0.185
+    ndcg_retrieve_sim: 0.889
+    spearman_corr: 0.323
+    triplet_agreement: 0.658
   l1:
-    kendall_corr: 0.24399030208587646
-    mae: 0.17742937803268433
-    ndcg_retrieve_sim: 0.8904314637184143
-    spearman_corr: 0.3273361325263977
-    triplet_agreement: 0.6592423915863037
+    kendall_corr: 0.244
+    mae: 0.177
+    ndcg_retrieve_sim: 0.89
+    spearman_corr: 0.327
+    triplet_agreement: 0.659
   l2:
-    kendall_corr: 0.24018242955207825
-    mae: 0.17657893896102905
-    ndcg_retrieve_sim: 0.8884034156799316
-    spearman_corr: 0.32331037521362305
-    triplet_agreement: 0.6578352451324463
+    kendall_corr: 0.24
+    mae: 0.177
+    ndcg_retrieve_sim: 0.888
+    spearman_corr: 0.323
+    triplet_agreement: 0.658
   poincare:
-    kendall_corr: 0.2355058342218399
-    mae: 0.18389011919498444
-    ndcg_retrieve_sim: 0.8891348242759705
-    spearman_corr: 0.314281165599823
-    triplet_agreement: 0.6554536819458008
+    kendall_corr: 0.24
+    mae: 0.316
+    ndcg_retrieve_sim: 0.889
+    spearman_corr: 0.321
+    triplet_agreement: 0.656

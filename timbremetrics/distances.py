@@ -1,5 +1,7 @@
 import torch
+import torch.nn as nn
 from torchmetrics.functional import pairwise_cosine_similarity
+import timbremetrics.pmath as pmath
 
 
 def l1(x):
@@ -15,25 +17,64 @@ def cosine(x):
 
 
 def poincare(x, c=1.0):
-    return _dist(x.unsqueeze(0), x.unsqueeze(1), c)
+    projector = ToPoincare(c)
+    x_poincare = projector(x)
+    return pmath.dist_matrix(x_poincare, x_poincare, c=c)
 
 
-def artanh(x):
-    return 0.5 * (torch.log1p(x) - torch.log1p(-x))
+"""
+code below is from https://github.com/leymir/hyperbolic-image-embeddings/blob/master/hyptorch/nn.py
+MIT License
+Copyright (c) 2019 Valentin Khrulkov
+"""
 
 
-def _mobius_add(x, y, c):
-    xy = (x * y).sum(dim=-1, keepdim=True)
-    x2 = (x * x).sum(dim=-1, keepdim=True)
-    y2 = (y * y).sum(dim=-1, keepdim=True)
-    num = (1 + 2 * c * xy + c * y2) * x + (1 - c * x2) * y
-    denom = 1 + 2 * c * xy + c**2 * x2 * y2
-    return num / denom
+class ToPoincare(nn.Module):
+    r"""
+    Module which maps points in n-dim Euclidean space
+    to n-dim Poincare ball
+    """
 
+    def __init__(self, c, train_c=False, train_x=False, ball_dim=None, riemannian=True):
+        super(ToPoincare, self).__init__()
+        if train_x:
+            if ball_dim is None:
+                raise ValueError(
+                    "if train_x=True, ball_dim has to be integer, got {}".format(
+                        ball_dim
+                    )
+                )
+            self.xp = nn.Parameter(torch.zeros((ball_dim,)))
+        else:
+            self.register_parameter("xp", None)
 
-def _dist(x, y, c, keepdim=False):
-    c = torch.as_tensor(c).type_as(x)
-    sqrt_c = c**0.5
-    mobius_result = _mobius_add(-x, y, c).norm(dim=-1, p=2, keepdim=keepdim)
-    dist_c = artanh(sqrt_c * mobius_result)
-    return dist_c * 2 / sqrt_c
+        if train_c:
+            self.c = nn.Parameter(
+                torch.Tensor(
+                    [
+                        c,
+                    ]
+                )
+            )
+        else:
+            self.c = c
+
+        self.train_x = train_x
+
+        self.riemannian = pmath.RiemannianGradient
+        self.riemannian.c = c
+
+        if riemannian:
+            self.grad_fix = lambda x: self.riemannian.apply(x)
+        else:
+            self.grad_fix = lambda x: x
+
+    def forward(self, x):
+
+        if self.train_x:
+            xp = pmath.project(pmath.expmap0(self.xp, c=self.c), c=self.c)
+            return self.grad_fix(pmath.project(pmath.expmap(xp, x, c=self.c), c=self.c))
+        return self.grad_fix(pmath.project(pmath.expmap0(x, c=self.c), c=self.c))
+
+    def extra_repr(self):
+        return "c={}, train_x={}".format(self.c, self.train_x)
