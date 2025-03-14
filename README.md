@@ -27,10 +27,4 @@ pip install -e .[extra]
 Especially, Python version 3.11.6 is recommanded for evaluating pre-trained models.
 
 ## Usage
-```
-from timbremetrics.metrics import TimbreMetric
-
-metric = TimbreMetric(model)
-
-evaluation_results = metric()
-```
+to be finished
