@@ -273,7 +273,7 @@ mss:
     ndcg_retrieve_sim: 0.873
     spearman_corr: 0.232
     triplet_agreement: 0.605
-time_avg_cdpam-acoustic:
+time-avg_cdpam-acoustic:
   cosine:
     kendall_corr: 0.189
     mae: 0.281
@@ -298,7 +298,7 @@ time_avg_cdpam-acoustic:
     ndcg_retrieve_sim: 0.875
     spearman_corr: 0.252
     triplet_agreement: 0.621
-time_avg_cdpam-content:
+time-avg_cdpam-content:
   cosine:
     kendall_corr: 0.187
     mae: 0.263
@@ -323,7 +323,7 @@ time_avg_cdpam-content:
     ndcg_retrieve_sim: 0.875
     spearman_corr: 0.24
     triplet_agreement: 0.615
-time_avg_clap-2023:
+time-avg_clap-2023:
   cosine:
     kendall_corr: 0.344
     mae: 0.191
@@ -348,7 +348,7 @@ time_avg_clap-2023:
     ndcg_retrieve_sim: 0.914
     spearman_corr: 0.442
     triplet_agreement: 0.72
-time_avg_clap-laion-audio:
+time-avg_clap-laion-audio:
   cosine:
     kendall_corr: 0.344
     mae: 0.2
@@ -373,7 +373,7 @@ time_avg_clap-laion-audio:
     ndcg_retrieve_sim: 0.91
     spearman_corr: 0.436
     triplet_agreement: 0.717
-time_avg_clap-laion-music:
+time-avg_clap-laion-music:
   cosine:
     kendall_corr: 0.347
     mae: 0.175
@@ -398,7 +398,7 @@ time_avg_clap-laion-music:
     ndcg_retrieve_sim: 0.911
     spearman_corr: 0.432
     triplet_agreement: 0.716
-time_avg_dac-44kHz:
+time-avg_dac-44kHz:
   cosine:
     kendall_corr: 0.212
     mae: 0.329
@@ -423,7 +423,7 @@ time_avg_dac-44kHz:
     ndcg_retrieve_sim: 0.88
     spearman_corr: 0.281
     triplet_agreement: 0.638
-time_avg_encodec-emb:
+time-avg_encodec-emb:
   cosine:
     kendall_corr: 0.258
     mae: 0.295
@@ -448,7 +448,7 @@ time_avg_encodec-emb:
     ndcg_retrieve_sim: 0.889
     spearman_corr: 0.342
     triplet_agreement: 0.668
-time_avg_encodec-emb-48k:
+time-avg_encodec-emb-48k:
   cosine:
     kendall_corr: 0.173
     mae: 0.327
@@ -473,7 +473,7 @@ time_avg_encodec-emb-48k:
     ndcg_retrieve_sim: 0.873
     spearman_corr: 0.229
     triplet_agreement: 0.613
-time_avg_jtfs:
+time-avg_jtfs:
   cosine:
     kendall_corr: 0.244
     mae: 0.343
@@ -498,7 +498,7 @@ time_avg_jtfs:
     ndcg_retrieve_sim: 0.884
     spearman_corr: 0.279
     triplet_agreement: 0.64
-time_avg_mfcc:
+time-avg_mfcc:
   cosine:
     kendall_corr: 0.303
     mae: 0.326
@@ -523,7 +523,7 @@ time_avg_mfcc:
     ndcg_retrieve_sim: 0.895
     spearman_corr: 0.396
     triplet_agreement: 0.686
-time_avg_mss:
+time-avg_mss:
   cosine:
     kendall_corr: 0.216
     mae: 0.332
@@ -548,7 +548,7 @@ time_avg_mss:
     ndcg_retrieve_sim: 0.883
     spearman_corr: 0.288
     triplet_agreement: 0.636
-time_avg_w2v2-large-12:
+time-avg_w2v2-large-12:
   cosine:
     kendall_corr: 0.168
     mae: 0.191
@@ -573,7 +573,7 @@ time_avg_w2v2-large-12:
     ndcg_retrieve_sim: 0.876
     spearman_corr: 0.23
     triplet_agreement: 0.606
-time_avg_wavlm-large-12:
+time-avg_wavlm-large-12:
   cosine:
     kendall_corr: 0.26
     mae: 0.278

@@ -97,7 +97,7 @@ class TimbreMetric(nn.Module):
         super().__init__()
 
         self.model = model
-        self.model_id = id(model)
+        # self.model_id = id(model)
         self.use_fadtk_model = use_fadtk_model
         self.fadtk_keep_time_dimension = fadtk_keep_time_dimension
 
@@ -158,9 +158,9 @@ class TimbreMetric(nn.Module):
     def forward(self, model=None):
         if model is None:
             model = self.model
-        assert (
-            id(model) == self.model_id
-        ), "Model does not match the model used to initialize the metric."
+        # assert (
+        #     id(model) == self.model_id
+        # ), "Model does not match the model used to initialize the metric."
         if hasattr(model, "training"):
             if model.training:
                 model.eval()

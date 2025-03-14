@@ -18,7 +18,7 @@ class jtfs(nn.Module):
     ):
         super().__init__()
         class_name = self.__class__.__name__
-        self.name = class_name if keep_time_dimension else f"time_avg_{class_name}"
+        self.name = class_name if keep_time_dimension else f"time-avg_{class_name}"
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.keep_time_dimension = keep_time_dimension
         # fix a duration since T has to be smaller than any input lengths

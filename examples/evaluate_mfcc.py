@@ -21,7 +21,7 @@ class mfcc(nn.Module):
     ):
         super().__init__()
         class_name = self.__class__.__name__
-        self.name = class_name if keep_time_dimension else f"time_avg_{class_name}"
+        self.name = class_name if keep_time_dimension else f"time-avg_{class_name}"
         self.keep_time_dimension = keep_time_dimension
         self.sr = sample_rate
         self.melkwargs = melkwargs

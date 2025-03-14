@@ -43,7 +43,7 @@ for model in models:
             pad_to_max_duration=False,
         )
         res = metric()
-        write_results_to_yaml(out_file, f"time_avg_{model.name}", res)
+        write_results_to_yaml(out_file, f"time-avg_{model.name}", res)
 
         metric = TimbreMetric(
             model,
