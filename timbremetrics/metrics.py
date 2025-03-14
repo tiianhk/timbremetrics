@@ -144,6 +144,8 @@ class TimbreMetric(nn.Module):
                 first_param = next(model.parameters())
                 dtype = first_param.dtype
                 device = first_param.device
+        if hasattr(model, "device"):
+            device = model.device
         return device, dtype
 
     def _retrieve_dissim_info(self):
@@ -190,7 +192,7 @@ class TimbreMetric(nn.Module):
                         embedding, dim=0
                     )  # (n_frames, n_features) -> (n_features)
             else:
-                embedding = model(audio)  # audio shape (1, n_samples)
+                embedding = model(audio).float()  # audio shape (1, n_samples)
                 assert isinstance(embedding, Tensor)
             embedding = embedding.flatten()
             embeddings.append(embedding)
