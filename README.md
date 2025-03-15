@@ -13,11 +13,10 @@ Run
 ```
 pip install git+https://github.com/tiianhk/timbremetrics.git
 ```
-To install as an editable package
- - git clone this repository
- - cd into its directory
- - run
+or, to install as an editable package
 ```
+git clone https://github.com/tiianhk/timbremetrics.git
+cd timbremetrics
 pip install -e .
 ```
 If you want to run python scripts in the `examples/` folder to evaluate pre-trained models like CLAP and DSP features such as MFCCs, use `[extra]` to include extra dependencies:
