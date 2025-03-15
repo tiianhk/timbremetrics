@@ -28,3 +28,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["timbremetrics"]
+
+[tool.setuptools]
+# Include non-Python files (e.g., .aiff, .txt)
+include-package-data = true
