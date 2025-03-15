@@ -13,14 +13,16 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-extra = [
+dev = [
     "black",
+]
+extra = [
     "fadtk==1.0.1",
     "cdpam",
     "descript-audio-codec==1.0.0",
     "kymatio @ git+https://github.com/kymatio/kymatio.git@2e190d92a19ce274988590c834e978063cb0c490",
-    "seaborn",
     "music2latent",
+    "seaborn",
 ]
 
 [build-system]
