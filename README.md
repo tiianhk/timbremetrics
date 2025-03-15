@@ -20,11 +20,11 @@ To install as an editable package
 ```
 pip install -e .
 ```
-If you want to run python scripts in the `examples/` folder to evaluate pre-trained models like CLAP and DSP models such as MFCC, run the following line to install extra dependencies.
+If you want to run python scripts in the `examples/` folder to evaluate pre-trained models like CLAP and DSP features such as MFCCs, in the cloned repository run the following line to install extra dependencies.
 ```
 pip install -e .[extra]
 ```
-Especially, Python version 3.11.6 is recommanded for evaluating pre-trained models.
+Especially, Python version 3.11.6 is recommanded for using pre-trained models loaded with [fadtk](https://github.com/microsoft/fadtk).
 
 ## Usage
 to be finished
