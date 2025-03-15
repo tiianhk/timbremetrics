@@ -1,0 +1,3 @@
+recursive-include timbremetrics/sounds *.aiff
+recursive-include timbremetrics/true_dissim *.txt
+
