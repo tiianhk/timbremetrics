@@ -41,13 +41,13 @@ class mss(nn.Module):
 
 
 model = mss()
-metric = TimbreMetric(model)
-res = metric()
+metric = TimbreMetric()
+res = metric(model)
 print_results(model.name, res)
 write_results_to_yaml(out_file, model.name, res)
 
 model = mss(keep_time_dimension=True)
-metric = TimbreMetric(model, pad_to_max_duration=True)
-res = metric()
+metric = TimbreMetric(pad_to_max_duration=True)
+res = metric(model)
 print_results(model.name, res)
 write_results_to_yaml(out_file, model.name, res)

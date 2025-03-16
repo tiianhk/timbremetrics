@@ -35,13 +35,13 @@ class mfcc(nn.Module):
 
 
 model = mfcc()
-metric = TimbreMetric(model, sample_rate=model.sr)
-res = metric()
+metric = TimbreMetric(sample_rate=model.sr)
+res = metric(model)
 print_results(model.name, res)
 write_results_to_yaml(out_file, model.name, res)
 
 model = mfcc(keep_time_dimension=True)
-metric = TimbreMetric(model, sample_rate=model.sr, pad_to_max_duration=True)
-res = metric()
+metric = TimbreMetric(sample_rate=model.sr, pad_to_max_duration=True)
+res = metric(model)
 print_results(model.name, res)
 write_results_to_yaml(out_file, model.name, res)

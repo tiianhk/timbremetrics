@@ -62,23 +62,7 @@ class AudioLoader:
             assert self.fixed_duration is None
             max_sample_num = max([x["audio"].shape[-1] for x in audio_dataset])
             for x in audio_dataset:
-                padding = max_sample_num - x["audio"].shape[-1]
-                if isinstance(x["audio"], torch.Tensor):
-                    x["audio"] = F.pad(x["audio"], (0, padding))
-                elif isinstance(x["audio"], np.ndarray):
-                    assert self.fadtk_model is not None
-                    pad_width = [(0, 0)] * (x["audio"].ndim - 1) + [(0, padding)]
-                    x["audio"] = np.pad(x["audio"], pad_width)
-                else:
-                    assert self.fadtk_model is not None
-                    # for descript audio codec
-                    from audiotools import AudioSignal
-
-                    assert isinstance(x["audio"], AudioSignal)
-                    assert isinstance(x["audio"].audio_data, torch.Tensor)
-                    x["audio"].audio_data = F.pad(
-                        x["audio"].audio_data, (0, padding)
-                    )
+                x["audio"] = self._to_target_sample_num(x["audio"], max_sample_num)
         return audio_dataset
 
     def _load_one_audio_file(self, dataset, audio_file):
@@ -92,15 +76,40 @@ class AudioLoader:
             if self.target_sr is not None and sr != self.target_sr:
                 audio = torchaudio.transforms.Resample(sr, self.target_sr)(audio)
                 sr = self.target_sr
-            if self.fixed_duration is not None:
-                assert self.pad_to_max_duration is False
-                target_sample_num = int(self.fixed_duration * sr)
-                if audio.shape[-1] > target_sample_num:
-                    audio = audio[..., :target_sample_num]
-                elif audio.shape[-1] < target_sample_num:
-                    padding = target_sample_num - audio.shape[-1]
-                    audio = F.pad(audio, (0, padding))
+        if self.fixed_duration is not None:
+            assert self.pad_to_max_duration is False
+            target_sample_num = int(self.fixed_duration * sr)
+            audio = self._to_target_sample_num(audio, target_sample_num)
         return audio, sr
+
+    def _to_target_sample_num(self, audio, target_sample_num: int):
+        if isinstance(audio, torch.Tensor):
+            if audio.shape[-1] > target_sample_num:
+                audio = audio[..., :target_sample_num]
+            elif audio.shape[-1] < target_sample_num:
+                padding = target_sample_num - audio.shape[-1]
+                audio = F.pad(audio, (0, padding))
+        elif isinstance(audio, np.ndarray):
+            assert self.fadtk_model is not None
+            if audio.shape[-1] > target_sample_num:
+                audio = audio[..., :target_sample_num]
+            elif audio.shape[-1] < target_sample_num:
+                padding = target_sample_num - audio.shape[-1]
+                pad_width = [(0, 0)] * (audio.ndim - 1) + [(0, padding)]
+                audio = np.pad(audio, pad_width)
+        else:
+            assert self.fadtk_model is not None
+            # for descript audio codec
+            from audiotools import AudioSignal
+
+            assert isinstance(audio, AudioSignal)
+            assert isinstance(audio.audio_data, torch.Tensor)
+            if audio.audio_data.shape[-1] > target_sample_num:
+                audio.audio_data = audio.audio_data[..., :target_sample_num]
+            elif audio.audio_data.shape[-1] < target_sample_num:
+                padding = target_sample_num - audio.audio_data.shape[-1]
+                audio.audio_data = F.pad(audio.audio_data, (0, padding))
+        return audio
 
 
 def get_true_dissim(device=None):
@@ -118,7 +127,7 @@ def print_results(model_name, results):
     for distance, metrics in results.items():
         print(f"    {distance}:")
         for metric, value in metrics.items():
-            print(f"        {metric}: {value.item():.4f}")
+            print(f"        {metric}: {value.item():.3f}")
     print()
 
 

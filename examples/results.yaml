@@ -350,7 +350,7 @@ time-avg_cdpam-content:
     triplet_agreement: 0.615
 time-avg_clap-2023:
   cosine:
-    kendall_corr: 0.344
+    kendall_corr: 0.343
     mae: 0.191
     ndcg_retrieve_sim: 0.915
     spearman_corr: 0.443
@@ -368,10 +368,10 @@ time-avg_clap-2023:
     spearman_corr: 0.443
     triplet_agreement: 0.723
   poincare:
-    kendall_corr: 0.343
+    kendall_corr: 0.342
     mae: 0.308
     ndcg_retrieve_sim: 0.914
-    spearman_corr: 0.442
+    spearman_corr: 0.441
     triplet_agreement: 0.72
 time-avg_clap-laion-audio:
   cosine:
@@ -381,7 +381,7 @@ time-avg_clap-laion-audio:
     spearman_corr: 0.443
     triplet_agreement: 0.721
   l1:
-    kendall_corr: 0.342
+    kendall_corr: 0.343
     mae: 0.152
     ndcg_retrieve_sim: 0.911
     spearman_corr: 0.442
@@ -433,11 +433,11 @@ time-avg_dac-44kHz:
   l1:
     kendall_corr: 0.256
     mae: 0.186
-    ndcg_retrieve_sim: 0.884
+    ndcg_retrieve_sim: 0.885
     spearman_corr: 0.334
     triplet_agreement: 0.665
   l2:
-    kendall_corr: 0.257
+    kendall_corr: 0.258
     mae: 0.188
     ndcg_retrieve_sim: 0.885
     spearman_corr: 0.334
@@ -446,11 +446,11 @@ time-avg_dac-44kHz:
     kendall_corr: 0.212
     mae: 0.208
     ndcg_retrieve_sim: 0.88
-    spearman_corr: 0.281
+    spearman_corr: 0.28
     triplet_agreement: 0.638
 time-avg_encodec-emb:
   cosine:
-    kendall_corr: 0.258
+    kendall_corr: 0.257
     mae: 0.295
     ndcg_retrieve_sim: 0.889
     spearman_corr: 0.342
@@ -468,7 +468,7 @@ time-avg_encodec-emb:
     spearman_corr: 0.354
     triplet_agreement: 0.676
   poincare:
-    kendall_corr: 0.258
+    kendall_corr: 0.257
     mae: 0.251
     ndcg_retrieve_sim: 0.889
     spearman_corr: 0.342
@@ -621,14 +621,14 @@ time-avg_w2v2-large-12:
     kendall_corr: 0.168
     mae: 0.324
     ndcg_retrieve_sim: 0.876
-    spearman_corr: 0.23
-    triplet_agreement: 0.606
+    spearman_corr: 0.228
+    triplet_agreement: 0.605
 time-avg_wavlm-large-12:
   cosine:
     kendall_corr: 0.26
     mae: 0.278
     ndcg_retrieve_sim: 0.898
-    spearman_corr: 0.349
+    spearman_corr: 0.35
     triplet_agreement: 0.674
   l1:
     kendall_corr: 0.284
@@ -637,7 +637,7 @@ time-avg_wavlm-large-12:
     spearman_corr: 0.377
     triplet_agreement: 0.687
   l2:
-    kendall_corr: 0.268
+    kendall_corr: 0.269
     mae: 0.195
     ndcg_retrieve_sim: 0.899
     spearman_corr: 0.357

@@ -38,7 +38,7 @@ def ndcg_retrieve_sim(pred: Tensor, true: Tensor) -> Tensor:
     pred = 1 - pred
     true = 1 - true
     ndcg_scores = torch.zeros_like(pred[:, 0])
-    # retrieval_normalized_dcg flatten input tensors
+    # retrieval_normalized_dcg flattens input tensors so we use a loop
     for i in range(pred.shape[0]):
         ndcg_scores[i] = retrieval_normalized_dcg(pred[i], true[i])
     return ndcg_scores.sum()
@@ -83,9 +83,35 @@ def triplet_agreement(pred: Tensor, true: Tensor, margin: float = 0.1) -> Tensor
 
 
 class TimbreMetric(nn.Module):
+    """Compute how well a model's embeddings capture perceptual timbre similarity.
+
+    Args:
+        model: A model that outputs embeddings for audio signals. (default: None)
+        device: The device to use for computation, normally "cuda" or "cpu".
+            If model is nn.Module and has parameters, this is inferred. (default: None)
+        dtype: The data type to use for computation, normally torch.float32.
+            If model is nn.Module and has parameters, this is inferred. (default: None)
+        use_fadtk_model: Whether to use a fadtk model. If True,
+            model must be provided for suitable audio loading. (default: False)
+        fadtk_keep_time_dimension: Whether to keep the time dimension
+            of the fadtk model output. (default: False)
+        distances: A list of distance functions to use for computing dissimilarity
+            matrices. (default: [l1, l2, cosine, poincare])
+        metrics: A list of metric functions to use for evaluating the model's performance.
+            (default: [mae, ndcg_retrieve_sim, spearman_corr, kendall_corr, triplet_agreement])
+        sample_rate: The sample rate to use for audio loading. If None,
+            the original sample rate (44100 Hz) is used. (default: None)
+        pad_to_max_duration: Whether to pad audio signals to the maximum duration
+            in the dataset. If True, fixed_duration must be None. (default: False)
+        fixed_duration: The duration to pad or truncate audio signals to.
+            If provided, pad_to_max_duration must be False. (default: None)
+    """
+
     def __init__(
         self,
-        model,
+        model=None,
+        device=None,
+        dtype=None,
         use_fadtk_model=False,
         fadtk_keep_time_dimension=False,
         distances=None,
@@ -97,8 +123,17 @@ class TimbreMetric(nn.Module):
         super().__init__()
 
         self.model = model
-        # self.model_id = id(model)
+        self.device = device
+        self.dtype = dtype
+        if isinstance(self.model, nn.Module):
+            if any(p.numel() > 0 for p in self.model.parameters()):
+                self.device, self.dtype = self._retrieve_model_info(self.model)
+
         self.use_fadtk_model = use_fadtk_model
+        if self.use_fadtk_model:
+            assert (
+                self.model is not None
+            ), "If using FADTK, model must be provided for suitable audio loading."
         self.fadtk_keep_time_dimension = fadtk_keep_time_dimension
 
         self.distances = [l1, l2, cosine, poincare]
@@ -122,7 +157,6 @@ class TimbreMetric(nn.Module):
         self.sample_rate = sample_rate
         self.pad_to_max_duration = pad_to_max_duration
         self.fixed_duration = fixed_duration
-        self.device, self.dtype = self._retrieve_model_info(self.model)
         self.datasets = list_datasets()
         audio_loader = AudioLoader(
             fadtk_model=self.model if self.use_fadtk_model else None,
@@ -136,16 +170,10 @@ class TimbreMetric(nn.Module):
         self.true_dissim = get_true_dissim(device=self.device)
         self.num_pairs, self.num_stimuli = self._retrieve_dissim_info()
 
-    def _retrieve_model_info(self, model):
-        device = None
-        dtype = None
-        if isinstance(model, nn.Module):
-            if any(model.parameters()):
-                first_param = next(model.parameters())
-                dtype = first_param.dtype
-                device = first_param.device
-        if hasattr(model, "device"):
-            device = model.device
+    def _retrieve_model_info(self, model: nn.Module):
+        first_param = next(model.parameters())
+        device = first_param.device
+        dtype = first_param.dtype
         return device, dtype
 
     def _retrieve_dissim_info(self):
@@ -159,10 +187,8 @@ class TimbreMetric(nn.Module):
 
     def forward(self, model=None):
         if model is None:
+            assert self.model is not None, "Model must be provided."
             model = self.model
-        # assert (
-        #     id(model) == self.model_id
-        # ), "Model does not match the model used to initialize the metric."
         if hasattr(model, "training"):
             if model.training:
                 model.eval()
@@ -183,18 +209,16 @@ class TimbreMetric(nn.Module):
                 embedding = model.get_embedding(audio)
                 if not isinstance(embedding, Tensor):
                     embedding = torch.tensor(embedding)
-                if embedding.dtype == torch.float16:
-                    embedding = (
-                        embedding.float()
-                    )  # euclidean distance does not support float16
                 if not self.fadtk_keep_time_dimension:
                     embedding = torch.mean(
                         embedding, dim=0
                     )  # (n_frames, n_features) -> (n_features)
             else:
-                embedding = model(audio).float()  # audio shape (1, n_samples)
-                assert isinstance(embedding, Tensor)
-            embedding = embedding.flatten()
+                embedding = model(audio)  # audio shape (1, n_samples)
+                assert isinstance(
+                    embedding, Tensor
+                ), "Model must return a torch.Tensor."
+            embedding = embedding.flatten().float()
             embeddings.append(embedding)
         if len(set([embedding.shape for embedding in embeddings])) > 1:
             raise ValueError(

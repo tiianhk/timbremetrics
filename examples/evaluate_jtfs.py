@@ -35,20 +35,20 @@ class jtfs(nn.Module):
         ).to(self.device)
 
     def forward(self, audio):
-        y = self.transform(audio.to(self.device))
+        y = self.transform(audio)
         if not self.keep_time_dimension:
             y = y.mean(dim=-1)
-        return y.cpu()
+        return y
 
 
 model = jtfs(J=10, Q=(8, 2), J_fr=5, Q_fr=2, T=44100, F=2**4, keep_time_dimension=False)
-metric = TimbreMetric(model, fixed_duration=2.0)
-res = metric()
+metric = TimbreMetric(device=model.device, fixed_duration=2.0)
+res = metric(model)
 print_results(model.name, res)
 write_results_to_yaml(out_file, model.name, res)
 
 model = jtfs(J=10, Q=(8, 2), J_fr=5, Q_fr=2, T=44100, F=2**4, keep_time_dimension=True)
-metric = TimbreMetric(model, fixed_duration=2.0)
-res = metric()
+metric = TimbreMetric(device=model.device, fixed_duration=2.0)
+res = metric(model)
 print_results(model.name, res)
 write_results_to_yaml(out_file, model.name, res)
