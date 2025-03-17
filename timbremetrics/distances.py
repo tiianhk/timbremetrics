@@ -12,6 +12,10 @@ def l2(x):
     return torch.cdist(x, x, p=2)
 
 
+def dot_product(x):
+    return -x @ x.T
+
+
 def cosine(x):
     return 1 - pairwise_cosine_similarity(x)
 

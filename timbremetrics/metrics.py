@@ -12,7 +12,7 @@ from .utils import (
     mask,
     min_max_normalization,
 )
-from .distances import l1, l2, cosine, poincare
+from .distances import l1, l2, dot_product, cosine, poincare
 
 
 def mae(pred: Tensor, true: Tensor) -> Tensor:
@@ -96,7 +96,7 @@ class TimbreMetric(nn.Module):
         fadtk_keep_time_dimension: Whether to keep the time dimension
             of the fadtk model output. (default: False)
         distances: A list of distance functions to use for computing dissimilarity
-            matrices. (default: [l1, l2, cosine, poincare])
+            matrices. (default: [l2, cosine])
         metrics: A list of metric functions to use for evaluating the model's performance.
             (default: [mae, ndcg_retrieve_sim, spearman_corr, kendall_corr, triplet_agreement])
         sample_rate: The sample rate to use for audio loading. If None,
@@ -136,7 +136,7 @@ class TimbreMetric(nn.Module):
             ), "If using FADTK, model must be provided for suitable audio loading."
         self.fadtk_keep_time_dimension = fadtk_keep_time_dimension
 
-        self.distances = [l1, l2, cosine, poincare]
+        self.distances = [l2, cosine]
         if distances is not None:
             assert set(distances).issubset(
                 set(self.distances)
