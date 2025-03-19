@@ -23,7 +23,7 @@ If you want to run python scripts in the `examples/` folder to evaluate pre-trai
 ```
 pip install -e .[extra]
 ```
-Especially, Python version 3.11.6 is recommanded if loading pre-trained models with [fadtk](https://github.com/microsoft/fadtk).
+Python version 3.11.6 is recommanded if loading pre-trained models with [fadtk](https://github.com/microsoft/fadtk).
 
 ## Usage
 A minimal example
@@ -33,9 +33,9 @@ metric = TimbreMetric()
 results = metric(model)
 print(results)
 ```
-The `model` should be a Callable and is used to produce embeddings of audio tensors of shape `(1, num_samples)`.
+The `model` should be a Callable and is used to produce embeddings for audio tensors of shape `(1, num_samples)`.
 Output tensors should have the same shape so their pairwise distances can be computed.
 
-See [here](timbremetrics/metrics.py#L86-L107) for arguments to initialize the metric. Check the files in `examples/` for examples.
+See [here](timbremetrics/metrics.py#L86-L107) for options to initialize the metric. Check the files in `examples/` for examples.
 
 ## Acknowledgement
