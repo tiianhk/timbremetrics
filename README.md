@@ -39,7 +39,7 @@ results = metric(model)
 # print the results
 print_results(model_name, results)
 ```
-The printed results when the `model` computes the MFCC (see `examples/evaluate_mfcc.py`)
+The printed results for `model` that computes the MFCC (see `examples/evaluate_mfcc.py`)
 ```
 mfcc:
     l2:
