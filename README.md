@@ -19,11 +19,11 @@ git clone https://github.com/tiianhk/timbremetrics.git
 cd timbremetrics
 pip install -e .
 ```
-If you want to run Python scripts in the `examples/` folder to evaluate pre-trained models like CLAP and DSP features such as the joint time-frequency scattering transform (jTFS), use `[extra]` to install additional dependencies:
+If you want to run Python scripts in the `examples/` folder to evaluate pre-trained neural networks like CLAP and signal processing based features such as the joint time-frequency scattering transform (jTFS), use `[extra]` to install additional dependencies:
 ```
 pip install -e .[extra]
 ```
-Python version 3.11.6 is recommanded if loading pre-trained models with [fadtk](https://github.com/microsoft/fadtk).
+Python version 3.11.6 is recommanded if using pre-trained models with [fadtk](https://github.com/microsoft/fadtk).
 
 ## Usage
 A minimal example
