@@ -46,7 +46,7 @@ metric = TimbreMetric(device='cuda')
 # the default sample rate is 44100 Hz, you can change it to suit your model
 metric = TimbreMetric(sample_rate=48000)
 
-# audio length is different, you can pad audio to the max length of one dataset
+# audio lengths are different, you can pad them to the maximum length in one dataset
 metric = TimbreMetric(pad_to_max_duration=True)
 
 # you can pad or truncate all audio to a fixed duration
