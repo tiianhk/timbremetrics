@@ -1,7 +1,6 @@
 import os
 from fadtk.model_loader import *
-from timbremetrics.metrics import TimbreMetric
-from timbremetrics.utils import print_results, write_results_to_yaml
+from timbremetrics import TimbreMetric, print_results, write_results_to_yaml
 from timbremetrics.paths import BASE_DIR
 
 out_file = os.path.join(os.path.dirname(BASE_DIR), "examples/results.yaml")
@@ -37,21 +36,23 @@ for model in models:
         model.load_model()
 
         metric = TimbreMetric(
-            model,
             use_fadtk_model=True,
+            fadtk_audio_loader=model.load_wav,
             fadtk_keep_time_dimension=False,
+            sample_rate=model.sr,
             pad_to_max_duration=False,
         )
-        res = metric()
+        res = metric(model)
         write_results_to_yaml(out_file, f"time-avg_{model.name}", res)
 
         metric = TimbreMetric(
-            model,
             use_fadtk_model=True,
+            fadtk_audio_loader=model.load_wav,
             fadtk_keep_time_dimension=True,
+            sample_rate=model.sr,
             pad_to_max_duration=True,
         )
-        res = metric()
+        res = metric(model)
         write_results_to_yaml(out_file, model.name, res)
 
     except Exception as e:

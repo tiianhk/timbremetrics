@@ -86,33 +86,32 @@ class TimbreMetric(nn.Module):
     """Compute how well a model's embeddings capture perceptual timbre similarity.
 
     Args:
-        model: A model that outputs embeddings for audio signals. (default: None)
-        device: The device to use for computation, normally "cuda" or "cpu".
-            If model is nn.Module and has parameters, this is inferred. (default: None)
-        dtype: The data type to use for computation, normally torch.float32.
-            If model is nn.Module and has parameters, this is inferred. (default: None)
-        use_fadtk_model: Whether to use a fadtk model. If True,
-            model must be provided for suitable audio loading. (default: False)
+        device: The device to load data. Default: CPU
+        dtype: The data type of audio input. Default: torch.float32
+        use_fadtk_model: Whether to use a fadtk model.
+        fadtk_audio_loader: The dedicated audio loader for the fadtk model.
+            If use_fadtk_model is True, this must be provided.
         fadtk_keep_time_dimension: Whether to keep the time dimension
-            of the fadtk model output. (default: False)
+            of the fadtk model output.
         distances: A list of distance functions to use for computing dissimilarity
-            matrices. (default: [l2, cosine])
+            matrices. Default: [l2, cosine]
         metrics: A list of metric functions to use for evaluating the model's performance.
-            (default: [mae, ndcg_retrieve_sim, spearman_corr, kendall_corr, triplet_agreement])
+            Default: [mae, ndcg_retrieve_sim, spearman_corr, kendall_corr, triplet_agreement]
         sample_rate: The sample rate to use for audio loading. If None,
-            the original sample rate (44100 Hz) is used. (default: None)
-        pad_to_max_duration: Whether to pad audio signals to the maximum duration
-            in the dataset. If True, fixed_duration must be None. (default: False)
+            the original sample rate (44100 Hz) is used. If use_fadtk_model is True,
+            this must be provided.
+        pad_to_max_duration: Whether to pad audio signals to the maximum audio duration
+            of the dataset. If True, fixed_duration must be None.
         fixed_duration: The duration to pad or truncate audio signals to.
-            If provided, pad_to_max_duration must be False. (default: None)
+            If provided, pad_to_max_duration must be False.
     """
 
     def __init__(
         self,
-        model=None,
         device=None,
         dtype=None,
         use_fadtk_model=False,
+        fadtk_audio_loader=None,
         fadtk_keep_time_dimension=False,
         distances=None,
         metrics=None,
@@ -122,18 +121,15 @@ class TimbreMetric(nn.Module):
     ):
         super().__init__()
 
-        self.model = model
         self.device = device
         self.dtype = dtype
-        if isinstance(self.model, nn.Module):
-            if any(p.numel() > 0 for p in self.model.parameters()):
-                self.device, self.dtype = self._retrieve_model_info(self.model)
 
         self.use_fadtk_model = use_fadtk_model
+        self.fadtk_audio_loader = fadtk_audio_loader
         if self.use_fadtk_model:
             assert (
-                self.model is not None
-            ), "If using FADTK, model must be provided for suitable audio loading."
+                self.fadtk_audio_loader is not None
+            ), "a dedicated audio loader needs to be provided."
         self.fadtk_keep_time_dimension = fadtk_keep_time_dimension
 
         self.distances = [l2, cosine]
@@ -155,13 +151,17 @@ class TimbreMetric(nn.Module):
             self.metrics = metrics
 
         self.sample_rate = sample_rate
+        if self.use_fadtk_model:
+            assert (
+                self.sample_rate is not None
+            ), "sample rate used by the fadtk model needs to be provided."
         self.pad_to_max_duration = pad_to_max_duration
         self.fixed_duration = fixed_duration
         self.datasets = list_datasets()
         audio_loader = AudioLoader(
-            fadtk_model=self.model if self.use_fadtk_model else None,
             device=self.device,
             dtype=self.dtype,
+            fadtk_audio_loader=self.fadtk_audio_loader,
             target_sr=self.sample_rate,
             pad_to_max_duration=self.pad_to_max_duration,
             fixed_duration=self.fixed_duration,
@@ -169,12 +169,6 @@ class TimbreMetric(nn.Module):
         self.audio_datasets = audio_loader._load_audio_datasets()
         self.true_dissim = get_true_dissim(device=self.device)
         self.num_pairs, self.num_stimuli = self._retrieve_dissim_info()
-
-    def _retrieve_model_info(self, model: nn.Module):
-        first_param = next(model.parameters())
-        device = first_param.device
-        dtype = first_param.dtype
-        return device, dtype
 
     def _retrieve_dissim_info(self):
         num_pairs = torch.tensor(0.0).to(self.device)
@@ -185,10 +179,8 @@ class TimbreMetric(nn.Module):
             num_pairs += N * (N - 1) / 2
         return num_pairs, num_stimuli
 
-    def forward(self, model=None):
-        if model is None:
-            assert self.model is not None, "Model must be provided."
-            model = self.model
+    def forward(self, model):
+        """Compute the evaluation metrics for a model."""
         if hasattr(model, "training"):
             if model.training:
                 model.eval()

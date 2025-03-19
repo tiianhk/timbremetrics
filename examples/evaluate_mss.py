@@ -2,8 +2,7 @@ import os
 import torch
 import torch.nn as nn
 
-from timbremetrics.metrics import TimbreMetric
-from timbremetrics.utils import print_results, write_results_to_yaml
+from timbremetrics import TimbreMetric, print_results, write_results_to_yaml
 from timbremetrics.paths import BASE_DIR
 
 out_file = os.path.join(os.path.dirname(BASE_DIR), "examples/results.yaml")

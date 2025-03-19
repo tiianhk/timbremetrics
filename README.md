@@ -26,4 +26,12 @@ pip install -e .[extra]
 Especially, Python version 3.11.6 is recommanded if loading pre-trained models with [fadtk](https://github.com/microsoft/fadtk).
 
 ## Usage
-to be finished
+A minimal example
+```
+from timbremetrics import TimbreMetric, print_results
+metric = TimbreMetric()
+results = metric(model)
+print_results(model_name, results)
+```
+The `model` provided should be a Callable and is used to produce embeddings of audio tensors of shape (1, num_samples).
+The output tensors should have the same shape so that their pairwise distances can be computed.
