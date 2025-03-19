@@ -19,7 +19,7 @@ git clone https://github.com/tiianhk/timbremetrics.git
 cd timbremetrics
 pip install -e .
 ```
-If you want to run python scripts in the `examples/` folder to evaluate pre-trained models like CLAP and DSP features such as MFCCs, use `[extra]` to include extra dependencies:
+If you want to run Python scripts in the `examples/` folder to evaluate pre-trained models like CLAP and DSP features such as MFCC, use `[extra]` to install additional dependencies:
 ```
 pip install -e .[extra]
 ```
@@ -28,7 +28,7 @@ Python version 3.11.6 is recommanded if loading pre-trained models with [fadtk](
 ## Usage
 A minimal example
 ```
-from timbremetrics import TimbreMetric
+from timbremetrics import TimbreMetric, print_results
 
 # initialization and data loading
 metric = TimbreMetric()
@@ -36,7 +36,24 @@ metric = TimbreMetric()
 # compute the metrics
 results = metric(model)
 
-print(results)
+# print the results
+print_results(model_name, results)
+```
+The printed results when the `model` computes the MFCC (see `examples/evaluate_mfcc.py`)
+```
+mfcc:
+    l2:
+        mae: 0.168
+        ndcg_retrieve_sim: 0.905
+        spearman_corr: 0.442
+        kendall_corr: 0.342
+        triplet_agreement: 0.722
+    cosine:
+        mae: 0.281
+        ndcg_retrieve_sim: 0.907
+        spearman_corr: 0.451
+        kendall_corr: 0.351
+        triplet_agreement: 0.726
 ```
 Some options
 ```
