@@ -19,7 +19,7 @@ git clone https://github.com/tiianhk/timbremetrics.git
 cd timbremetrics
 pip install -e .
 ```
-If you want to run Python scripts in the `examples/` folder to evaluate pre-trained models like CLAP and DSP features such as MFCC, use `[extra]` to install additional dependencies:
+If you want to run Python scripts in the `examples/` folder to evaluate pre-trained models like CLAP and DSP features such as the joint time-frequency scattering transform (jTFS), use `[extra]` to install additional dependencies:
 ```
 pip install -e .[extra]
 ```
