@@ -29,13 +29,41 @@ Python version 3.11.6 is recommanded if loading pre-trained models with [fadtk](
 A minimal example
 ```
 from timbremetrics import TimbreMetric
+
+# initialization and data loading
 metric = TimbreMetric()
+
+# compute the metrics
 results = metric(model)
+
 print(results)
 ```
-The `model` should be a Callable and is used to produce embeddings for audio tensors of shape `(1, num_samples)`.
+Some options
+```
+# load data to gpu
+metric = TimbreMetric(device='cuda')
+
+# the default sample rate is 44100 Hz, you can change it to suit your model
+metric = TimbreMetric(sample_rate=48000)
+
+# audio length is different, you can pad audio to the max length of one dataset
+metric = TimbreMetric(pad_to_max_duration=True)
+
+# you can pad or truncate all audio to a fixed duration
+metric = TimbreMetric(fixed_duration=2.0)
+```
+The `model` should be a Callable (functions, methods, lambdas, objects that implement the `__call__` method) and is used to produce embeddings for audio tensors of shape `(1, num_samples)`.
 Output tensors should have the same shape so their pairwise distances can be computed.
 
-See [here](timbremetrics/metrics.py#L86-L107) for options to initialize the metric. Check the files in `examples/` for examples.
+See [here](timbremetrics/metrics.py#L86-L107) for more options to initialize an object using the `TimbreMetric` class. Check the files in `examples/` for examples.
 
 ## Acknowledgement
+Data source:
+ - https://github.com/EtienneTho/musical-timbre-studies
+ - https://github.com/ben-hayes/timbre-dissimilarity-metrics
+
+Code:
+ - Much of this work has been adapted from https://github.com/ben-hayes/timbre-dissimilarity-metrics
+ - Some code was taken without modification from https://github.com/leymir/hyperbolic-image-embeddings
+
+Thanks to the authors for their work!
