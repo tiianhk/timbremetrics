@@ -72,7 +72,7 @@ metric = TimbreMetric(fixed_duration=2.0)
 The `model` should be a `Callable` (e.g., functions, methods, lambdas, or objects that implement the `__call__` method) and should produce embeddings for audio tensors of shape `(1, num_samples)`.
 The output tensors must have the same shape to allow for pairwise distance computation.
 
-If used during model training, it is recommended to initialize the object before training starts and use it to compute metrics once per validation epoch (e.g., in `on_validation_epoch_end()` of a Lightning module).
+If used during model training, it is recommended to initialize the object before training starts (e.g., in `__init__()` of a Lightning module) and use it to compute metrics once per validation epoch (e.g., in `on_validation_epoch_end()` of a Lightning module).
 
 See [here](timbremetrics/metrics.py#L86-L107) for more options to initialize an object using the `TimbreMetric` class. For practical examples, check the files in `examples/`.
 
