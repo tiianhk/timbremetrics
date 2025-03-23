@@ -7,7 +7,8 @@ import os
 
 true_dissim = get_true_dissim()
 for d, mtx in true_dissim.items():
-    true_dissim[d] = min_max_normalization(mask(mtx)).numpy()
+    mtx = min_max_normalization(mask(mtx)).numpy()
+    true_dissim[d] = mtx + mtx.T
 
 idx1, idx2, idx3 = 0, 10, 20
 dataset_names = list(true_dissim.keys())
@@ -23,43 +24,62 @@ starts = np.cumsum([0] + block_sizes[:-1])
 
 rows, cols = sparse_mtx.nonzero()
 values = sparse_mtx[rows, cols]
-x = rows + cols
-y = cols - rows
+alphas = np.where(rows < cols, 1.0, 0.2)
 
-plt.figure(figsize=(6, 2))
-scatter = plt.scatter(x, y, c=values, cmap="viridis", marker="s", s=5)
+plt.figure(figsize=(6, 6))
+scatter = plt.scatter(cols, rows, c=values, alpha=alphas, cmap="YlGnBu", marker="s", s=5)
 
-y_min = np.min(y)
-label_y_position = y_min - 2  # Vertical position for labels
+label_x = starts[1] + 1
+label_y = starts[0] + block_sizes[0] // 2
+plt.text(
+    label_x,
+    label_y,
+    f"\u2192 {block_labels[0]}",
+    ha="left",
+    va="center",
+    rotation=0,
+    fontsize=8,
+    color="black",
+)
 
-for label, start, size in zip(block_labels, starts, block_sizes):
+label_x = starts[2] + 1
+label_y = starts[1] + block_sizes[1] // 2
+plt.text(
+    label_x,
+    label_y,
+    f"\u2192 {block_labels[1]}",
+    ha="left",
+    va="center",
+    rotation=0,
+    fontsize=8,
+    color="black",
+)
 
-    midpoint_x = 2 * start + (size - 1)
+label_x = starts[2] - 2
+label_y = starts[2] + block_sizes[2] // 2
+plt.text(
+    label_x,
+    label_y,
+    f"{block_labels[2]} \u2190",
+    ha="right",
+    va="center",
+    rotation=0,
+    fontsize=8,
+    color="black",
+)
 
-    plt.text(
-        midpoint_x,
-        label_y_position,
-        label,
-        ha="center",
-        va="top",
-        rotation=0,
-        fontsize=8,
-        color="black",
-    )
-
-cbar = plt.colorbar(scatter, pad=0.0, shrink=0.5, aspect=10)
+cbar = plt.colorbar(scatter, pad=0.0, shrink=0.7, aspect=20)
 cbar.outline.set_visible(False)
 cbar.ax.set_yticks([0, 1])
 cbar.ax.set_yticklabels(["identical", "most dissimilar    "])
 cbar.ax.tick_params(labelsize=8, length=0)
 
 plt.gca().set_aspect("equal")
-plt.ylim(label_y_position - 2, np.max(y))
+plt.gca().invert_yaxis()
 plt.axis("off")
 plt.tight_layout()
 plt.savefig(
     os.path.join(BASE_DIR, "../assets/true_dissim.png"),
     bbox_inches="tight",
     dpi=300,
-    transparent=True,
 )
