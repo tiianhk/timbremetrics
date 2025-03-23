@@ -68,10 +68,10 @@ plt.text(
     color="black",
 )
 
-cbar = plt.colorbar(scatter, pad=0.0, shrink=0.7, aspect=20)
+cbar = plt.colorbar(scatter, pad=0.0, shrink=0.7, aspect=20, orientation='horizontal')
 cbar.outline.set_visible(False)
-cbar.ax.set_yticks([0, 1])
-cbar.ax.set_yticklabels(["identical", "most dissimilar    "])
+cbar.ax.set_xticks([0, 1])
+cbar.ax.set_xticklabels(["identical", "most dissimilar"])
 cbar.ax.tick_params(labelsize=12, length=0)
 
 plt.gca().set_aspect("equal")
