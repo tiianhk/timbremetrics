@@ -38,7 +38,7 @@ plt.text(
     ha="left",
     va="center",
     rotation=0,
-    fontsize=10,
+    fontsize=12,
     color="black",
 )
 
@@ -51,7 +51,7 @@ plt.text(
     ha="left",
     va="center",
     rotation=0,
-    fontsize=10,
+    fontsize=12,
     color="black",
 )
 
@@ -64,7 +64,7 @@ plt.text(
     ha="right",
     va="center",
     rotation=0,
-    fontsize=10,
+    fontsize=12,
     color="black",
 )
 
@@ -72,7 +72,7 @@ cbar = plt.colorbar(scatter, pad=0.0, shrink=0.7, aspect=20)
 cbar.outline.set_visible(False)
 cbar.ax.set_yticks([0, 1])
 cbar.ax.set_yticklabels(["identical", "most dissimilar    "])
-cbar.ax.tick_params(labelsize=10, length=0)
+cbar.ax.tick_params(labelsize=12, length=0)
 
 plt.gca().set_aspect("equal")
 plt.gca().invert_yaxis()
