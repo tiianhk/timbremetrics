@@ -4,7 +4,7 @@ Measure how well your model’s audio embeddings match human timbre perception u
 
 Below, human (dis)similarity ratings from three datasets are visualized as triangular matrices. Each point corresponds to a unique audio pair. A darker color indicates that the sounds are judged to be more dissimilar by human listeners.
 
-![Dissimilarities between audio stimuli judged by humans](assets/true_dissim.png)
+<img src="assets/true_dissim.png" alt="Dissimilarities between audio stimuli judged by humans" width="40%"/>
 
 These values represent perceptual timbre similarity, as in nearly all cases, paired sounds are controlled to have the same pitch, loudness, and duration.
 
