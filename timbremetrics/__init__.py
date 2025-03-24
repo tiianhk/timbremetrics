@@ -15,6 +15,7 @@ from .distances import (
 )
 from .utils import (
     AudioLoader,
+    list_datasets,
     print_results,
     write_results_to_yaml,
 )

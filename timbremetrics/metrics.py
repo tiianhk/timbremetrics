@@ -93,6 +93,8 @@ class TimbreMetric(nn.Module):
             If use_fadtk_model is True, this must be provided.
         fadtk_keep_time_dimension: Whether to keep the time dimension
             of the fadtk model output.
+        datasets: A list of dataset names to evaluate the model on.
+            If None, all datasets are used.
         distances: A list of distance functions to use for computing dissimilarity
             matrices. Default: [l2, cosine]
         metrics: A list of metric functions to use for evaluating the model's performance.
@@ -113,6 +115,7 @@ class TimbreMetric(nn.Module):
         use_fadtk_model=False,
         fadtk_audio_loader=None,
         fadtk_keep_time_dimension=False,
+        datasets=None,
         distances=None,
         metrics=None,
         sample_rate=None,
@@ -131,6 +134,12 @@ class TimbreMetric(nn.Module):
                 self.fadtk_audio_loader is not None
             ), "a dedicated audio loader needs to be provided."
         self.fadtk_keep_time_dimension = fadtk_keep_time_dimension
+
+        self.datasets = datasets
+        if self.datasets is None:
+            self.datasets = list_datasets()
+        else:
+            assert set(self.datasets).issubset(set(list_datasets())), "Invalid dataset."
 
         self.distances = [l2, cosine]
         if distances is not None:
@@ -157,8 +166,9 @@ class TimbreMetric(nn.Module):
             ), "sample rate used by the fadtk model needs to be provided."
         self.pad_to_max_duration = pad_to_max_duration
         self.fixed_duration = fixed_duration
-        self.datasets = list_datasets()
+
         audio_loader = AudioLoader(
+            datasets=self.datasets,
             device=self.device,
             dtype=self.dtype,
             fadtk_audio_loader=self.fadtk_audio_loader,
@@ -167,7 +177,7 @@ class TimbreMetric(nn.Module):
             fixed_duration=self.fixed_duration,
         )
         self.audio_datasets = audio_loader._load_audio_datasets()
-        self.true_dissim = get_true_dissim(device=self.device)
+        self.true_dissim = get_true_dissim(datasets=self.datasets, device=self.device)
         self.num_pairs, self.num_stimuli = self._retrieve_dissim_info()
 
     def _retrieve_dissim_info(self):

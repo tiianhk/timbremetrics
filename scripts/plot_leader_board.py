@@ -98,7 +98,7 @@ for metric, scores in metric_scores.items():
     best_indices = []
     for i in range(4):
         group_indices = [j for j in range(len(scores)) if j % 4 == i]
-        if metric == 'mae':
+        if metric == "mae":
             index = min(group_indices, key=lambda j: scores[j])
         else:
             index = max(group_indices, key=lambda j: scores[j])
@@ -109,7 +109,7 @@ for metric, scores in metric_scores.items():
     best_y = [scores[i] for i in best_indices]
 
     # Find the overall best index out of the four
-    if metric == 'mae':
+    if metric == "mae":
         overall_best_index = best_indices[best_y.index(min(best_y))]
     else:
         overall_best_index = best_indices[best_y.index(max(best_y))]
@@ -119,12 +119,18 @@ for metric, scores in metric_scores.items():
     overall_best_y = scores[overall_best_index]
 
     # Plot the gold marker behind the original marker
-    ax.scatter(overall_best_x, overall_best_y + small_margin / 3, 
-            marker='o', color='gold', s=200)  # Larger size and lower z-order
+    ax.scatter(
+        overall_best_x,
+        overall_best_y + small_margin / 3,
+        marker="o",
+        color="gold",
+        s=200,
+    )  # Larger size and lower z-order
 
     # Plot the original markers
-    ax.scatter(best_x, [y + small_margin / 3 for y in best_y], 
-            marker='*', color=colors, s=200)
+    ax.scatter(
+        best_x, [y + small_margin / 3 for y in best_y], marker="*", color=colors, s=200
+    )
 
     # ax.set_xticks(x_positions)
     # ax.set_xticklabels([config.split(" ")[1] for config in keys], rotation=90)  # Rotate config labels
@@ -155,7 +161,9 @@ for metric, scores in metric_scores.items():
 
     handles, labels = ax.get_legend_handles_labels()
     unique_labels = dict(zip(labels, handles))  # Use a dictionary to remove duplicates
-    ax.legend(unique_labels.values(), unique_labels.keys(), loc="upper right", fontsize=16)
+    ax.legend(
+        unique_labels.values(), unique_labels.keys(), loc="upper right", fontsize=16
+    )
 
     plt.savefig(
         os.path.join(os.path.dirname(BASE_DIR), f"assets/{metric}_eval.png"),
