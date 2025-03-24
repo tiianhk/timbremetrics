@@ -29,7 +29,7 @@ for model, distance, metric, score in entries:
         metric_scores[metric].append((model, distance, score))
     else:
         assert len(splits) == 2
-        metric_scores[metric].append((splits[1], f"{splits[0]} {distance}", score))
+        metric_scores[metric].append((splits[1], f"{splits[0]}-{distance}", score))
 
 # Set style
 sns.set_theme(style="darkgrid")
@@ -55,7 +55,7 @@ for metric, scores in metric_scores.items():
     gap = 2  # Space between model groups
 
     for model in sorted_models:
-        # Sort the 4 types within the model by score (high to low)
+        # Sort the 4 configs within the model by string name
         sorted_types = sorted(model_groups[model], key=lambda x: x[0])
 
         x_range = list(range(current_x, current_x + len(sorted_types)))
@@ -75,6 +75,12 @@ for metric, scores in metric_scores.items():
 
     fig, ax = plt.subplots(figsize=(30, 5))
 
+    min_value = min(scores)
+    max_value = max(scores)
+    small_margin = 0.1 * (max_value - min_value)  # Small margin as 10% of the range
+
+    colors = ["#0077BB", "#CC3311", "#009988", "#EE7733"]
+
     # Plot each model separately, ensuring gaps between groups
     for model in sorted_models:
         x_range = model_x_ranges[model]
@@ -85,19 +91,66 @@ for metric, scores in metric_scores.items():
         ax.bar(
             x_range,
             y_values,
-            color=['#0077BB', '#CC3311', '#009988', '#EE7733'],
-            label=model,
+            color=colors,
+            label=[config for config, _ in sorted_types],
         )
 
+    best_indices = []
+    for i in range(4):
+        group_indices = [j for j in range(len(scores)) if j % 4 == i]
+        if metric == 'mae':
+            index = min(group_indices, key=lambda j: scores[j])
+        else:
+            index = max(group_indices, key=lambda j: scores[j])
+        best_indices.append(index)
+
+    # Get the best x and y values for each config
+    best_x = [x_positions[i] for i in best_indices]
+    best_y = [scores[i] for i in best_indices]
+
+    # Find the overall best index out of the four
+    if metric == 'mae':
+        overall_best_index = best_indices[best_y.index(min(best_y))]
+    else:
+        overall_best_index = best_indices[best_y.index(max(best_y))]
+
+    # Get the x and y for the overall best
+    overall_best_x = x_positions[overall_best_index]
+    overall_best_y = scores[overall_best_index]
+
+    # Plot the gold marker behind the original marker
+    ax.scatter(overall_best_x, overall_best_y + small_margin / 3, 
+            marker='o', color='gold', s=100)  # Larger size and lower z-order
+
+    # Plot the original markers
+    ax.scatter(best_x, [y + small_margin / 3 for y in best_y], 
+            marker='*', color=colors)
+
     ax.set_xticks(x_positions)
-    ax.set_xticklabels(keys, rotation=90)
+    ax.set_xticklabels([config.split(" ")[1] for config in keys], rotation=90)  # Rotate config labels
+
+    # Add model labels under the grouped config labels
+    for model, x_range in model_x_ranges.items():
+        # Calculate the center of the x_range for the model
+        model_center = sum(x_range) / len(x_range)
+        ax.text(
+            model_center,
+            min_value - small_margin*6,  # Position below the bars
+            model,  # Model name
+            ha="center",  # Center align
+            va="top",  # Align to the top of the text
+            fontsize=10,
+            color="black",
+        )
+
     ax.set_ylabel(metric)
     ax.yaxis.grid(True, linestyle="--", alpha=0.6)
 
-    min_value = min(scores)
-    max_value = max(scores)
-    small_margin = 0.1 * (max_value - min_value)  # Small margin as 10% of the range
     ax.set_ylim(min_value - small_margin, max_value + small_margin)
+
+    handles, labels = ax.get_legend_handles_labels()
+    unique_labels = dict(zip(labels, handles))  # Use a dictionary to remove duplicates
+    ax.legend(unique_labels.values(), unique_labels.keys(), loc="upper right")
 
     plt.savefig(
         os.path.join(os.path.dirname(BASE_DIR), f"assets/{metric}_eval.png"),
