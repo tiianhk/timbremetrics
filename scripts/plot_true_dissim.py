@@ -27,7 +27,9 @@ values = sparse_mtx[rows, cols]
 alphas = np.where(rows < cols, 1.0, 0.2)
 
 plt.figure(figsize=(6, 6))
-scatter = plt.scatter(cols, rows, c=values, alpha=alphas, cmap="YlGnBu", marker="s", s=5)
+scatter = plt.scatter(
+    cols, rows, c=values, alpha=alphas, cmap="YlGnBu", marker="s", s=5
+)
 
 label_x = starts[1] + 1
 label_y = starts[0] + block_sizes[0] // 2
@@ -68,7 +70,7 @@ plt.text(
     color="black",
 )
 
-cbar = plt.colorbar(scatter, pad=0.0, shrink=0.7, aspect=20, orientation='horizontal')
+cbar = plt.colorbar(scatter, pad=0.0, shrink=0.7, aspect=20, orientation="horizontal")
 cbar.outline.set_visible(False)
 cbar.ax.set_xticks([0, 1])
 cbar.ax.set_xticklabels(["identical", "most dissimilar"])
