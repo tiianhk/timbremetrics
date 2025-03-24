@@ -6,7 +6,9 @@ Below, human (dis)similarity ratings from three datasets are visualized as trian
 
 <img src="assets/true_dissim.png" alt="Dissimilarities between audio stimuli judged by humans" width="70%"/>
 
-These values represent perceptual timbre similarity, as in many cases, paired sounds are controlled to have the same pitch, loudness, and duration. Below is the pitch, loudness, audio length distributions of datasets. Pitches are obtained from original papers. Note that, `Iverson1993_Whole` and `Iverson1993_Perc` have non-pitched stimuli and `Zacharakis2014_English` and `Zacharakis2014_Greek` have octave differences. Loudnesses are computed using [pyloudnorm](https://github.com/csteinmetz1/pyloudnorm) with a block size of 0.08. And the audio file lengths can be used as a reference for the duration.
+These values represent perceptual timbre similarity, as in many cases, paired sounds are controlled to have the same pitch, loudness, and duration. 
+
+Below is the pitch, loudness, audio length distributions of datasets. Pitch values are obtained from the original papers. Note that, `Iverson1993_Whole` and `Iverson1993_Perc` have non-pitched stimuli, while `Zacharakis2014_English` and `Zacharakis2014_Greek` have octave differences, with pitch ranging from A1 to A4. Loudness is computed using [pyloudnorm](https://github.com/csteinmetz1/pyloudnorm) with a block size of 0.08. The audio file lengths can serve as a reference for duration.
 
 <img src="assets/pitch-loudness-length.png" alt="Pitch, loudness, audio length distributions" width="70%"/>
 
