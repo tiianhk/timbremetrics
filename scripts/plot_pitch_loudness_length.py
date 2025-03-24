@@ -27,9 +27,9 @@ pitch = {
     "Iverson1993_Onset": [262] * 16,
     "Iverson1993_Remainder": [262] * 16,
     "Iverson1993_Whole": [262] * 16,
-    "Lakatos2000_Comb": [311] * 20,
+    "Lakatos2000_Comb": [311] * 15, # 5 are weakly- or non-pitched
     "Lakatos2000_Harm": [311] * 17,
-    "Lakatos2000_Perc": [311] * 18,
+    "Lakatos2000_Perc": [311] * 7, # 11 are weakly- or non-pitched
     "McAdams1995": [311] * 18,
     "Patil2012_A3": [220] * 11,
     "Patil2012_DX4": [294] * 11,
