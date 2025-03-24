@@ -19,7 +19,7 @@ for model, distances in data.items():
         for metric, score in metrics.items():
             entries.append((model, distance, metric, score))
 
-# Convert to a dictionary of {metric: [(model_distance, score)]}
+# Convert to a dictionary of {metric: [model, config, score]}
 metric_scores = {}
 for model, distance, metric, score in entries:
     if metric not in metric_scores:
@@ -29,11 +29,10 @@ for model, distance, metric, score in entries:
         metric_scores[metric].append((model, distance, score))
     else:
         assert len(splits) == 2
-        metric_scores[metric].append((splits[1], f"{splits[0]}_{distance}", score))
+        metric_scores[metric].append((splits[1], f"{splits[0]} {distance}", score))
 
 # Set style
-sns.set_theme(style="whitegrid")
-plt.rcParams["font.family"] = "serif"
+sns.set_theme(style="darkgrid")
 
 for metric, scores in metric_scores.items():
 
@@ -56,13 +55,13 @@ for metric, scores in metric_scores.items():
     gap = 2  # Space between model groups
 
     for model in sorted_models:
-        # Sort the 8 types within the model by score (high to low)
-        sorted_types = sorted(model_groups[model], key=lambda x: x[1], reverse=True)
+        # Sort the 4 types within the model by score (high to low)
+        sorted_types = sorted(model_groups[model], key=lambda x: x[0])
 
         x_range = list(range(current_x, current_x + len(sorted_types)))
         model_x_ranges[model] = x_range
         sorted_entries.extend(
-            [(f"{model}_{d}", s, x) for (d, s), x in zip(sorted_types, x_range)]
+            [(f"{model} {d}", s, x) for (d, s), x in zip(sorted_types, x_range)]
         )
 
         current_x += (
@@ -74,11 +73,7 @@ for metric, scores in metric_scores.items():
     scores = [v for _, v, _ in sorted_entries]
     x_positions = [x for _, _, x in sorted_entries]
 
-    fig, ax = plt.subplots(figsize=(30, 10))
-
-    # Generate distinct colors
-    cmap = plt.colormaps["tab10"]  # Get a colormap (10 distinct colors)
-    colors = {model: cmap(i % 10) for i, model in enumerate(sorted_models)}
+    fig, ax = plt.subplots(figsize=(30, 5))
 
     # Plot each model separately, ensuring gaps between groups
     for model in sorted_models:
@@ -87,13 +82,10 @@ for metric, scores in metric_scores.items():
             scores[x_positions.index(x)] for x in x_range
         ]  # Get scores for this model
 
-        ax.plot(
+        ax.bar(
             x_range,
             y_values,
-            "o-",
-            markersize=4,
-            linewidth=2,
-            color=colors[model],
+            color=['#0077BB', '#CC3311', '#009988', '#EE7733'],
             label=model,
         )
 
@@ -102,8 +94,10 @@ for metric, scores in metric_scores.items():
     ax.set_ylabel(metric)
     ax.yaxis.grid(True, linestyle="--", alpha=0.6)
 
-    # Add legend for models
-    ax.legend(title="Models", loc="upper right")
+    min_value = min(scores)
+    max_value = max(scores)
+    small_margin = 0.1 * (max_value - min_value)  # Small margin as 10% of the range
+    ax.set_ylim(min_value - small_margin, max_value + small_margin)
 
     plt.savefig(
         os.path.join(os.path.dirname(BASE_DIR), f"assets/{metric}_eval.png"),
