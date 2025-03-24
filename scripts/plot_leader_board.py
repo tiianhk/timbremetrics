@@ -120,37 +120,42 @@ for metric, scores in metric_scores.items():
 
     # Plot the gold marker behind the original marker
     ax.scatter(overall_best_x, overall_best_y + small_margin / 3, 
-            marker='o', color='gold', s=100)  # Larger size and lower z-order
+            marker='o', color='gold', s=200)  # Larger size and lower z-order
 
     # Plot the original markers
     ax.scatter(best_x, [y + small_margin / 3 for y in best_y], 
-            marker='*', color=colors)
+            marker='*', color=colors, s=200)
 
-    ax.set_xticks(x_positions)
-    ax.set_xticklabels([config.split(" ")[1] for config in keys], rotation=90)  # Rotate config labels
+    # ax.set_xticks(x_positions)
+    # ax.set_xticklabels([config.split(" ")[1] for config in keys], rotation=90)  # Rotate config labels
 
+    model_centers = []
     # Add model labels under the grouped config labels
     for model, x_range in model_x_ranges.items():
         # Calculate the center of the x_range for the model
-        model_center = sum(x_range) / len(x_range)
-        ax.text(
-            model_center,
-            min_value - small_margin*6,  # Position below the bars
-            model,  # Model name
-            ha="center",  # Center align
-            va="top",  # Align to the top of the text
-            fontsize=10,
-            color="black",
-        )
+        model_centers.append(sum(x_range) / len(x_range))
+        # ax.text(
+        #     model_center,
+        #     min_value - small_margin*5.5,  # Position below the bars
+        #     model,  # Model name
+        #     ha="center",  # Center align
+        #     va="top",  # Align to the top of the text
+        #     fontsize=16,
+        #     color="black",
+        #     rotation=30,
+        # )
 
-    ax.set_ylabel(metric)
+    ax.set_xticks(model_centers)
+    ax.set_xticklabels(list(model_x_ranges.keys()), rotation=15, fontsize=16)
+
+    ax.set_ylabel(metric, fontsize=16)
     ax.yaxis.grid(True, linestyle="--", alpha=0.6)
 
     ax.set_ylim(min_value - small_margin, max_value + small_margin)
 
     handles, labels = ax.get_legend_handles_labels()
     unique_labels = dict(zip(labels, handles))  # Use a dictionary to remove duplicates
-    ax.legend(unique_labels.values(), unique_labels.keys(), loc="upper right")
+    ax.legend(unique_labels.values(), unique_labels.keys(), loc="upper right", fontsize=16)
 
     plt.savefig(
         os.path.join(os.path.dirname(BASE_DIR), f"assets/{metric}_eval.png"),
