@@ -7,47 +7,51 @@ from timbremetrics import TimbreMetric, print_results, write_results_to_yaml
 from timbremetrics.paths import BASE_DIR
 
 out_file = os.path.join(os.path.dirname(BASE_DIR), "examples/results.yaml")
-DEFAULT_SR = 44100
 
 
 class jtfs(nn.Module):
 
-    def __init__(
-        self, J, Q, J_fr, Q_fr, T, F, keep_time_dimension=False, fixed_duration=2.0
-    ):
+    def __init__(self, J, Q, J_fr, Q_fr, T, F, keep_time_dimension=False):
         super().__init__()
         class_name = self.__class__.__name__
         self.name = class_name if keep_time_dimension else f"time-avg_{class_name}"
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.keep_time_dimension = keep_time_dimension
-        # fix a duration since T has to be smaller than any input lengths
-        self.fixed_duration = fixed_duration
-        self.transform = TimeFrequencyScattering(
-            shape=(int(self.fixed_duration * DEFAULT_SR),),
-            J=J,
-            Q=Q,
-            J_fr=J_fr,
-            Q_fr=Q_fr,
-            T=T,
-            F=F,
-            format="joint",
-        ).to(self.device)
+        self.J = J
+        self.Q = Q
+        self.J_fr = J_fr
+        self.Q_fr = Q_fr
+        self.T = T
+        self.F = F
+        self.cnt = 0
 
     def forward(self, audio):
-        y = self.transform(audio)
-        if not self.keep_time_dimension:
-            y = y.mean(dim=-1)
+        self.cnt += 1
+        print(f"jtfs: processing {self.cnt}-th sample")
+        N = audio.shape[-1]
+        transform = TimeFrequencyScattering(
+            shape=(N,),
+            J=self.J,
+            Q=self.Q,
+            J_fr=self.J_fr,
+            Q_fr=self.Q_fr,
+            T=self.T,
+            F=self.F,
+            format="time",
+        ).to(self.device)
+        y = transform(audio)
         return y
 
 
-model = jtfs(J=10, Q=(8, 2), J_fr=5, Q_fr=2, T=44100, F=2**4, keep_time_dimension=False)
-metric = TimbreMetric(device=model.device, fixed_duration=2.0)
+model = jtfs(
+    J=12, Q=(8, 2), J_fr=3, Q_fr=2, T="global", F=None, keep_time_dimension=False
+)
+metric = TimbreMetric(device=model.device)
 res = metric(model)
 print_results(model.name, res)
 write_results_to_yaml(out_file, model.name, res)
 
-model = jtfs(J=10, Q=(8, 2), J_fr=5, Q_fr=2, T=44100, F=2**4, keep_time_dimension=True)
-metric = TimbreMetric(device=model.device, fixed_duration=2.0)
+model = jtfs(J=12, Q=(8, 2), J_fr=3, Q_fr=2, T=None, F=None, keep_time_dimension=True)
+metric = TimbreMetric(device=model.device, pad_to_max_duration=True)
 res = metric(model)
 print_results(model.name, res)
 write_results_to_yaml(out_file, model.name, res)

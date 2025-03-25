@@ -104,17 +104,17 @@ encodec-emb-48k:
     triplet_agreement: 0.582
 jtfs:
   cosine:
-    kendall_corr: 0.247
-    mae: 0.342
-    ndcg_retrieve_sim: 0.886
-    spearman_corr: 0.328
-    triplet_agreement: 0.658
+    kendall_corr: 0.308
+    mae: 0.308
+    ndcg_retrieve_sim: 0.899
+    spearman_corr: 0.406
+    triplet_agreement: 0.697
   l2:
-    kendall_corr: 0.209
-    mae: 0.295
-    ndcg_retrieve_sim: 0.884
-    spearman_corr: 0.279
-    triplet_agreement: 0.641
+    kendall_corr: 0.256
+    mae: 0.24
+    ndcg_retrieve_sim: 0.897
+    spearman_corr: 0.34
+    triplet_agreement: 0.668
 mfcc:
   cosine:
     kendall_corr: 0.351
@@ -260,17 +260,17 @@ time-avg_encodec-emb-48k:
     triplet_agreement: 0.611
 time-avg_jtfs:
   cosine:
-    kendall_corr: 0.244
-    mae: 0.343
-    ndcg_retrieve_sim: 0.885
-    spearman_corr: 0.324
-    triplet_agreement: 0.656
+    kendall_corr: 0.119
+    mae: 0.464
+    ndcg_retrieve_sim: 0.865
+    spearman_corr: 0.162
+    triplet_agreement: 0.577
   l2:
-    kendall_corr: 0.208
-    mae: 0.295
-    ndcg_retrieve_sim: 0.884
-    spearman_corr: 0.279
-    triplet_agreement: 0.641
+    kendall_corr: 0.056
+    mae: 0.425
+    ndcg_retrieve_sim: 0.849
+    spearman_corr: 0.078
+    triplet_agreement: 0.537
 time-avg_mfcc:
   cosine:
     kendall_corr: 0.303
