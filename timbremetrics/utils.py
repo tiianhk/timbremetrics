@@ -32,7 +32,6 @@ class AudioLoader:
         dtype=None,
         fadtk_audio_loader=None,
         target_sr=None,
-        pad_to_max_duration=False,
         fixed_duration=None,
     ):
         self.datasets = datasets
@@ -40,14 +39,15 @@ class AudioLoader:
         self.dtype = dtype
         self.fadtk_audio_loader = fadtk_audio_loader
         self.target_sr = target_sr
-        self.pad_to_max_duration = pad_to_max_duration
         self.fixed_duration = fixed_duration
 
     def _load_audio_datasets(self):
         if self.datasets is None:
             self.datasets = list_datasets()
         else:
-            assert set(self.datasets).issubset(set(list_datasets())), "Invalid dataset"
+            assert set(self.datasets).issubset(
+                set(list_datasets())
+            ), f"Invalid dataset in {self.datasets}. Choose from {list_datasets()}"
         audio_datasets = {}
         for d in self.datasets:
             audio_datasets[d] = self._load_one_audio_dataset(d)
@@ -64,11 +64,6 @@ class AudioLoader:
             audio_dataset.append(
                 {"file": audio_file, "audio": audio, "sample_rate": sr}
             )
-        if self.pad_to_max_duration:
-            assert self.fixed_duration is None
-            max_sample_num = max([x["audio"].shape[-1] for x in audio_dataset])
-            for x in audio_dataset:
-                x["audio"] = self._to_target_length(x["audio"], max_sample_num)
         return audio_dataset
 
     def _load_one_audio_file(self, dataset, audio_file):
@@ -83,39 +78,37 @@ class AudioLoader:
                 audio = torchaudio.transforms.Resample(sr, self.target_sr)(audio)
                 sr = self.target_sr
         if self.fixed_duration is not None:
-            assert self.pad_to_max_duration is False
             target_sample_num = int(self.fixed_duration * sr)
-            audio = self._to_target_length(audio, target_sample_num)
+            audio = to_target_length(audio, target_sample_num)
         return audio, sr
 
-    def _to_target_length(self, audio, target_sample_num: int):
-        if isinstance(audio, torch.Tensor):
-            if audio.shape[-1] > target_sample_num:
-                audio = audio[..., :target_sample_num]
-            elif audio.shape[-1] < target_sample_num:
-                padding = target_sample_num - audio.shape[-1]
-                audio = F.pad(audio, (0, padding))
-        elif isinstance(audio, np.ndarray):
-            assert self.fadtk_audio_loader is not None
-            if audio.shape[-1] > target_sample_num:
-                audio = audio[..., :target_sample_num]
-            elif audio.shape[-1] < target_sample_num:
-                padding = target_sample_num - audio.shape[-1]
-                pad_width = [(0, 0)] * (audio.ndim - 1) + [(0, padding)]
-                audio = np.pad(audio, pad_width)
-        else:
-            assert self.fadtk_audio_loader is not None
-            # for descript audio codec
-            from audiotools import AudioSignal
 
-            assert isinstance(audio, AudioSignal)
-            assert isinstance(audio.audio_data, torch.Tensor)
-            if audio.audio_data.shape[-1] > target_sample_num:
-                audio.audio_data = audio.audio_data[..., :target_sample_num]
-            elif audio.audio_data.shape[-1] < target_sample_num:
-                padding = target_sample_num - audio.audio_data.shape[-1]
-                audio.audio_data = F.pad(audio.audio_data, (0, padding))
-        return audio
+def to_target_length(audio, target_sample_num: int):
+    if isinstance(audio, torch.Tensor):
+        if audio.shape[-1] > target_sample_num:
+            audio = audio[..., :target_sample_num]
+        elif audio.shape[-1] < target_sample_num:
+            padding = target_sample_num - audio.shape[-1]
+            audio = F.pad(audio, (0, padding))
+    elif isinstance(audio, np.ndarray):
+        if audio.shape[-1] > target_sample_num:
+            audio = audio[..., :target_sample_num]
+        elif audio.shape[-1] < target_sample_num:
+            padding = target_sample_num - audio.shape[-1]
+            pad_width = [(0, 0)] * (audio.ndim - 1) + [(0, padding)]
+            audio = np.pad(audio, pad_width)
+    else:
+        # for descript audio codec
+        from audiotools import AudioSignal
+
+        assert isinstance(audio, AudioSignal)
+        assert isinstance(audio.audio_data, torch.Tensor)
+        if audio.audio_data.shape[-1] > target_sample_num:
+            audio.audio_data = audio.audio_data[..., :target_sample_num]
+        elif audio.audio_data.shape[-1] < target_sample_num:
+            padding = target_sample_num - audio.audio_data.shape[-1]
+            audio.audio_data = F.pad(audio.audio_data, (0, padding))
+    return audio
 
 
 def get_true_dissim(datasets=None, device=None):

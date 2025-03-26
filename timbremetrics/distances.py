@@ -1,29 +1,59 @@
+from typing import Callable
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from torchmetrics.functional import pairwise_cosine_similarity
 import timbremetrics.pmath as pmath
 
 
-def l1(x):
-    return torch.cdist(x, x, p=1)
+def compute_from_paired_embeddings(x: dict, dist_fn: Callable):
+    N = x["num_stimuli"]
+    dist_mtx = torch.zeros(N, N, device=x[(0, 1)][0].device)
+    for i in range(N):
+        for j in range(i + 1, N):
+            dist_mtx[i, j] = dist_fn(x[(i, j)][0], x[(i, j)][1])
+    return dist_mtx
 
 
-def l2(x):
-    return torch.cdist(x, x, p=2)
+def l1(x, paired_embeddings=False):
+    if paired_embeddings == False:
+        return torch.cdist(x, x, p=1)
+    else:
+        dist_fn = lambda x, y: torch.norm(x - y, p=1)
+        return compute_from_paired_embeddings(x, dist_fn)
 
 
-def dot_product(x):
-    return -x @ x.T
+def l2(x, paired_embeddings=False):
+    if paired_embeddings == False:
+        return torch.cdist(x, x, p=2)
+    else:
+        dist_fn = lambda x, y: torch.norm(x - y, p=2)
+        return compute_from_paired_embeddings(x, dist_fn)
 
 
-def cosine(x):
-    return 1 - pairwise_cosine_similarity(x)
+def dot_product(x, paired_embeddings=False):
+    if paired_embeddings == False:
+        return -x @ x.T
+    else:
+        dist_fn = lambda x, y: -torch.dot(x, y)
+        return compute_from_paired_embeddings(x, dist_fn)
 
 
-def poincare(x, c=1.0):
-    projector = ToPoincare(c)
-    x_poincare = projector(x)
-    return pmath.dist_matrix(x_poincare, x_poincare, c=c)
+def cosine(x, paired_embeddings=False):
+    if paired_embeddings == False:
+        return 1 - pairwise_cosine_similarity(x)
+    else:
+        dist_fn = lambda x, y: 1 - F.cosine_similarity(x, y, dim=0)
+        return compute_from_paired_embeddings(x, dist_fn)
+
+
+def poincare(x, c=1.0, paired_embeddings=False):
+    if paired_embeddings == False:
+        projector = ToPoincare(c)
+        x_poincare = projector(x)
+        return pmath.dist_matrix(x_poincare, x_poincare, c=c)
+    else:
+        raise NotImplementedError("Not implemented yet.")
 
 
 """

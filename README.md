@@ -78,7 +78,7 @@ The output tensors must have the same shape to allow for pairwise distance compu
 
 If used during model training, it is recommended to initialize the object before training starts (e.g., in `__init__()` of a Lightning module) and use it to compute metrics once per validation epoch (e.g., in `on_validation_epoch_end()` of a Lightning module).
 
-See [here](timbremetrics/metrics.py#L86-L107) for more options to initialize an object using the `TimbreMetric` class. For practical examples, check the files in `examples/`.
+See [here](timbremetrics/metrics.py#L86-L110) for more options to initialize an object using the `TimbreMetric` class. For practical examples, check the files in `examples/`.
 
 ## Acknowledgement
 Data source:

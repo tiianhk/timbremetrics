@@ -14,33 +14,31 @@ DEFAULT_SR = 44100
 class mfcc(nn.Module):
     def __init__(
         self,
-        keep_time_dimension=False,
+        time_average=True,
         sample_rate=DEFAULT_SR,
         melkwargs={"n_fft": 2048, "hop_length": 512},
     ):
         super().__init__()
         class_name = self.__class__.__name__
-        self.name = class_name if keep_time_dimension else f"time-avg_{class_name}"
-        self.keep_time_dimension = keep_time_dimension
-        self.sr = sample_rate
-        self.melkwargs = melkwargs
+        self.name = f"time-avg_{class_name}" if time_average else class_name
+        self.time_average = time_average
         self.model = MFCC(sample_rate=sample_rate, melkwargs=melkwargs)
 
     def forward(self, x):
         x = self.model(x)
-        if not self.keep_time_dimension:
+        if self.time_average:
             x = x.mean(dim=-1)
         return x
 
 
-model = mfcc()
-metric = TimbreMetric(sample_rate=model.sr)
+model = mfcc(time_average=True)
+metric = TimbreMetric(pad_to_the_longer_length=False)
 res = metric(model)
 print_results(model.name, res)
 write_results_to_yaml(out_file, model.name, res)
 
-model = mfcc(keep_time_dimension=True)
-metric = TimbreMetric(sample_rate=model.sr, pad_to_max_duration=True)
+model = mfcc(time_average=False)
+metric = TimbreMetric(pad_to_the_longer_length=True)
 res = metric(model)
 print_results(model.name, res)
 write_results_to_yaml(out_file, model.name, res)

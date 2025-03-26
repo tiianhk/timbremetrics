@@ -11,13 +11,11 @@ out_file = os.path.join(os.path.dirname(BASE_DIR), "examples/results.yaml")
 class mss(nn.Module):
     """DDSP https://arxiv.org/abs/2001.04643v1"""
 
-    def __init__(
-        self, keep_time_dimension=False, fft_sizes=(4096, 2048, 1024, 512, 256, 128)
-    ):
+    def __init__(self, time_average=True, fft_sizes=(4096, 2048, 1024, 512, 256, 128)):
         super().__init__()
         class_name = self.__class__.__name__
-        self.name = class_name if keep_time_dimension else f"time-avg_{class_name}"
-        self.keep_time_dimension = keep_time_dimension
+        self.name = f"time-avg_{class_name}" if time_average else class_name
+        self.time_average = time_average
         self.fft_sizes = fft_sizes
 
     def forward(self, audio):
@@ -29,7 +27,7 @@ class mss(nn.Module):
                 mag_spec <= 1e-5, torch.tensor(1e-5, device=mag_spec.device), mag_spec
             )  # Avoid log(0)
             log_spec = torch.log(safe_mag_spec)
-            if not self.keep_time_dimension:
+            if self.time_average:
                 mag_spec = mag_spec.mean(dim=-1)
                 log_spec = log_spec.mean(dim=-1)
             specs.append(mag_spec.flatten(start_dim=1))
@@ -39,14 +37,14 @@ class mss(nn.Module):
         return torch.cat([specs, log_specs], dim=1)
 
 
-model = mss()
-metric = TimbreMetric()
+model = mss(time_average=True)
+metric = TimbreMetric(pad_to_the_longer_length=False)
 res = metric(model)
 print_results(model.name, res)
 write_results_to_yaml(out_file, model.name, res)
 
-model = mss(keep_time_dimension=True)
-metric = TimbreMetric(pad_to_max_duration=True)
+model = mss(time_average=False)
+metric = TimbreMetric(pad_to_the_longer_length=True)
 res = metric(model)
 print_results(model.name, res)
 write_results_to_yaml(out_file, model.name, res)
