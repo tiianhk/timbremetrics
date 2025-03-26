@@ -29,7 +29,7 @@ for model, distance, metric, score in entries:
         metric_scores[metric].append((model, distance, score))
     else:
         assert len(splits) == 2
-        metric_scores[metric].append((splits[1], f"{splits[0]}-{distance}", score))
+        metric_scores[metric].append((splits[1], f"{splits[0]}_{distance}", score))
 
 # Set style
 sns.set_theme(style="darkgrid")
@@ -46,6 +46,7 @@ for metric, scores in metric_scores.items():
         model: np.mean([s for _, s in data]) for model, data in model_groups.items()
     }
 
+    # list of models sorted by average score
     sorted_models = sorted(model_avg_scores, key=model_avg_scores.get, reverse=True)
 
     # Organize data for plotting
@@ -55,13 +56,13 @@ for metric, scores in metric_scores.items():
     gap = 2  # Space between model groups
 
     for model in sorted_models:
-        # Sort the 4 configs within the model by string name
+        # Sort configs within the model by string name
         sorted_types = sorted(model_groups[model], key=lambda x: x[0])
 
         x_range = list(range(current_x, current_x + len(sorted_types)))
         model_x_ranges[model] = x_range
         sorted_entries.extend(
-            [(f"{model} {d}", s, x) for (d, s), x in zip(sorted_types, x_range)]
+            [(c, s, x) for (c, s), x in zip(sorted_types, x_range)]
         )
 
         current_x += (
@@ -69,7 +70,7 @@ for metric, scores in metric_scores.items():
         )  # Move x position for next model, adding a gap
 
     # Extract x-axis labels, scores, and x positions
-    keys = [k for k, _, _ in sorted_entries]
+    configs = [c for c, _, _ in sorted_entries]
     scores = [v for _, v, _ in sorted_entries]
     x_positions = [x for _, _, x in sorted_entries]
 
@@ -81,75 +82,65 @@ for metric, scores in metric_scores.items():
 
     colors = ["#0077BB", "#CC3311", "#009988", "#EE7733"]
 
+    config_scores = {}
+
     # Plot each model separately, ensuring gaps between groups
     for model in sorted_models:
         x_range = model_x_ranges[model]
         y_values = [
             scores[x_positions.index(x)] for x in x_range
         ]  # Get scores for this model
+        config_labels = [
+            configs[x_positions.index(x)] for x in x_range
+        ]
 
         ax.bar(
             x_range,
             y_values,
-            color=colors,
-            label=[config for config, _ in sorted_types],
+            color=colors[: len(x_range)],
+            label=config_labels,
         )
 
-    best_indices = []
-    for i in range(4):
-        group_indices = [j for j in range(len(scores)) if j % 4 == i]
+        for i, c in enumerate(config_labels):
+            if c not in config_scores:
+                config_scores[c] = []
+            config_scores[c].append((x_range[i], y_values[i]))
+
+    best_tuple_entries = []
+    for i, c in enumerate(config_scores):
         if metric == "mae":
-            index = min(group_indices, key=lambda j: scores[j])
+            best_tuple = min(config_scores[c], key=lambda x: x[1])
         else:
-            index = max(group_indices, key=lambda j: scores[j])
-        best_indices.append(index)
+            best_tuple = max(config_scores[c], key=lambda x: x[1])
+        ax.scatter(
+            best_tuple[0],
+            best_tuple[1] + small_margin / 3,
+            marker="*",
+            color=colors[i],
+            s=200,
+            zorder=2,
+        )
+        best_tuple_entries.append(best_tuple)
 
-    # Get the best x and y values for each config
-    best_x = [x_positions[i] for i in best_indices]
-    best_y = [scores[i] for i in best_indices]
-
-    # Find the overall best index out of the four
     if metric == "mae":
-        overall_best_index = best_indices[best_y.index(min(best_y))]
+        best_of_best = min(best_tuple_entries, key=lambda x: x[1])
     else:
-        overall_best_index = best_indices[best_y.index(max(best_y))]
+        best_of_best = max(best_tuple_entries, key=lambda x: x[1])
 
-    # Get the x and y for the overall best
-    overall_best_x = x_positions[overall_best_index]
-    overall_best_y = scores[overall_best_index]
-
-    # Plot the gold marker behind the original marker
     ax.scatter(
-        overall_best_x,
-        overall_best_y + small_margin / 3,
+        best_of_best[0],
+        best_of_best[1] + small_margin / 3,
         marker="o",
         color="gold",
         s=200,
-    )  # Larger size and lower z-order
-
-    # Plot the original markers
-    ax.scatter(
-        best_x, [y + small_margin / 3 for y in best_y], marker="*", color=colors, s=200
+        zorder=1,
     )
-
-    # ax.set_xticks(x_positions)
-    # ax.set_xticklabels([config.split(" ")[1] for config in keys], rotation=90)  # Rotate config labels
 
     model_centers = []
     # Add model labels under the grouped config labels
     for model, x_range in model_x_ranges.items():
         # Calculate the center of the x_range for the model
         model_centers.append(sum(x_range) / len(x_range))
-        # ax.text(
-        #     model_center,
-        #     min_value - small_margin*5.5,  # Position below the bars
-        #     model,  # Model name
-        #     ha="center",  # Center align
-        #     va="top",  # Align to the top of the text
-        #     fontsize=16,
-        #     color="black",
-        #     rotation=30,
-        # )
 
     ax.set_xticks(model_centers)
     ax.set_xticklabels(list(model_x_ranges.keys()), rotation=15, fontsize=16)

@@ -21,7 +21,7 @@ BASE_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 # Run Python script
 python "$BASE_DIR/evaluate_mfcc.py"
 python "$BASE_DIR/evaluate_mss.py"
-python "$BASE_DIR/evaluate_jtfs.py"
 python "$BASE_DIR/evaluate_fadtk_models.py"
 python "$BASE_DIR/evaluate_music2latent.py"
 python "$BASE_DIR/evaluate_cae.py"
+python "$BASE_DIR/evaluate_jtfs.py"
