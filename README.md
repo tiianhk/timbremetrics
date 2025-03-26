@@ -46,29 +46,29 @@ print_results(model_name, results)
 The printed results for `model` that computes the MFCC (see `examples/evaluate_mfcc.py`)
 ```
 mfcc:
-    l2:
-        mae: 0.168
-        ndcg_retrieve_sim: 0.905
-        spearman_corr: 0.442
-        kendall_corr: 0.342
-        triplet_agreement: 0.722
-    cosine:
-        mae: 0.281
-        ndcg_retrieve_sim: 0.907
-        spearman_corr: 0.451
-        kendall_corr: 0.351
-        triplet_agreement: 0.726
+  cosine:
+    kendall_corr: 0.348
+    mae: 0.287
+    ndcg_retrieve_sim: 0.906
+    spearman_corr: 0.448
+    triplet_agreement: 0.724
+  l2:
+    kendall_corr: 0.342
+    mae: 0.169
+    ndcg_retrieve_sim: 0.905
+    spearman_corr: 0.442
+    triplet_agreement: 0.722
 ```
 Some options
 ```
 # load data to gpu
 metric = TimbreMetric(device='cuda')
 
-# the default sample rate is 44100 Hz, you can change it to suit your model
+# the default sample rate is 44100 Hz, you can change it to suit your usecase
 metric = TimbreMetric(sample_rate=48000)
 
-# audio lengths are different, you can pad them to the maximum length in one dataset
-metric = TimbreMetric(pad_to_max_duration=True)
+# audio lengths are different, you can pad the shorter one to match the longer one when comparing two sounds
+metric = TimbreMetric(pad_to_the_longer_length=True)
 
 # you can pad or truncate all audio to a fixed duration
 metric = TimbreMetric(fixed_duration=2.0)
@@ -88,5 +88,6 @@ Data source:
 Code:
  - Much of this work has been adapted from https://github.com/ben-hayes/timbre-dissimilarity-metrics
  - Some code was taken without modification from https://github.com/leymir/hyperbolic-image-embeddings
+ - A complex autoencoder is trained and evaluated, using code from https://github.com/SonyCSLParis/cae-invar
 
 Thanks to the authors for their work!
